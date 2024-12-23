@@ -1,0 +1,11 @@
+[
+    {
+        "Guest": {
+            "Status":{
+                "0": "Not Attending",
+                "1": "Pending",
+                "2": "Attending"
+            }
+        }
+    }
+]
