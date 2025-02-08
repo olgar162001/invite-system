@@ -152,7 +152,7 @@ class GuestController extends Controller
                     ->get();
     
         if ($guests->isEmpty()) {
-            return redirect()->route('events.show', $eventId)->with('error', 'Guest not found.');
+            return redirect()->route('event.show', $eventId)->with('error', 'Guest not found.');
         }
     
         return view('event.show')->with([
