@@ -134,47 +134,32 @@ class GuestController extends Controller
         return redirect()->back()->with('success', 'Guest Checked Successfully');
     }
 
-    /**
-     * Check-in a guest using their unique token.
-     */
-    public function checkInByToken(Request $request)
-    {
-        $token = $request->input('token');
-        $guest = Guest::where('checklist_token', $token)->first();
-
-        if (!$guest) {
-            return redirect()->back()->with('error', 'Invalid token.');
-        }
-
-        $guest->check_status = '1';
-        $guest->update();
-
-        return redirect()->back()->with('success', 'Guest Checked In Successfully');
-    }
-
+    
     public function search(Request $request, $eventId)
     {
         $token = $request->input('token');
-
-        // Find the guest using token and event ID
-        $guest = Guest::where('event_id', $eventId)
+    
+        // Get the event
+        $event = Event::where('id', $eventId)->first();
+    
+        if (!$event) {
+            return back()->with('error', 'Event not found.');
+        }
+    
+        // Search for a guest using the token within the event
+        $guests = Guest::where('event_id', $eventId)
                     ->where('checklist_token', $token)
-                    ->first();
-
-        if (!$guest) {
-            return back()->with('error', 'Guest not found.');
+                    ->get();
+    
+        if ($guests->isEmpty()) {
+            return redirect()->route('events.show', $eventId)->with('error', 'Guest not found.');
         }
-
-        if ($guest->check_status == '1') {
-            return back()->with('info', 'Guest already checked in.');
-        }
-
-        // Force update check_status to mark as checked in
-        $guest->update(['check_status' => '1']);
-
-        return back()->with('success', 'Guest checked in successfully.');
+    
+        return view('event.show')->with([
+            'event' => $event,
+            'guests' => $guests
+        ]);
     }
-
-
+    
 
 }
