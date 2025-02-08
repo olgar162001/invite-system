@@ -5,10 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Event;
 use App\Models\Guest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class GuestController extends Controller
 {
-
     public function __construct()
     {
         $this->middleware('auth')->except(['show']);
@@ -23,21 +23,19 @@ class GuestController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Generate a random alphanumeric string.
      */
-    // public function create()
-    // {
-        
-    // }
+    public function generateRandomString($length = 10)
+    {
+        return strtoupper(Str::random($length));
+    }
 
-    public function generateRandomString($length = 10) {
-        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $charactersLength = strlen($characters);
-        $randomString = '';
-        for ($i = 0; $i < $length; $i++) {
-            $randomString .= $characters[random_int(0, $charactersLength - 1)];
-        }
-        return $randomString;
+    /**
+     * Generate a unique 6-character token for checklist.
+     */
+    public function generateChecklistToken($length = 6)
+    {
+        return strtoupper(Str::random($length));
     }
 
     /**
@@ -53,13 +51,13 @@ class GuestController extends Controller
         $guest->type = $request->type;
         $guest->check_status = '0';
         $guest->status = '1';
-        $guest->invite_link = $this->generateRandomString();
+        $guest->invite_link = $this->generateRandomString(10); // Generate invite link
+        $guest->checklist_token = $this->generateChecklistToken(6); // Generate checklist token
         $guest->user_id = auth()->id();
         $guest->event_id = $id;
-        // dd($this->generateRandomString());
         $guest->save();
 
-        return redirect('/event/'.$id)->with('success','Guest Added');
+        return redirect('/event/' . $id)->with('success', 'Guest Added');
     }
 
     /**
@@ -68,8 +66,6 @@ class GuestController extends Controller
     public function show(string $id)
     {
         $guest = Guest::find($id);
-        $event = Event::find($id);
-        
         return view('card')->with('guest', $guest);
     }
 
@@ -94,18 +90,25 @@ class GuestController extends Controller
         $guest->phone = $request->phone;
         $guest->type = $request->type;
         $guest->check_status = '0';
-        if($request->status == 'Attending'){
+
+        if ($request->status == 'Attending') {
             $guest->status = '2';
-        }else if($request->status == 'Not Attending'){
+        } elseif ($request->status == 'Not Attending') {
             $guest->status = '0';
-        }else{
+        } else {
             $guest->status = '1';
         }
+
+        // Ensure token remains unchanged unless manually updated
+        if (!$guest->checklist_token) {
+            $guest->checklist_token = $this->generateChecklistToken(6);
+        }
+
         $guest->user_id = auth()->id();
         $guest->event_id = $id;
         $guest->update();
 
-        return redirect('/event/'.$id)->with('success', 'Guest Edited');
+        return redirect('/event/' . $id)->with('success', 'Guest Edited');
     }
 
     /**
@@ -119,12 +122,59 @@ class GuestController extends Controller
         return redirect('/event')->with('success', 'Guest Deleted');
     }
 
+    /**
+     * Manually check-in a guest.
+     */
     public function check($id)
     {
         $guest = Guest::find($id);
         $guest->check_status = '1';
         $guest->update();
 
-        return redirect()->back()->with('success', 'Guest Checked Succesfully');
+        return redirect()->back()->with('success', 'Guest Checked Successfully');
     }
+
+    /**
+     * Check-in a guest using their unique token.
+     */
+    public function checkInByToken(Request $request)
+    {
+        $token = $request->input('token');
+        $guest = Guest::where('checklist_token', $token)->first();
+
+        if (!$guest) {
+            return redirect()->back()->with('error', 'Invalid token.');
+        }
+
+        $guest->check_status = '1';
+        $guest->update();
+
+        return redirect()->back()->with('success', 'Guest Checked In Successfully');
+    }
+
+    public function search(Request $request, $eventId)
+    {
+        $token = $request->input('token');
+
+        // Find the guest using token and event ID
+        $guest = Guest::where('event_id', $eventId)
+                    ->where('checklist_token', $token)
+                    ->first();
+
+        if (!$guest) {
+            return back()->with('error', 'Guest not found.');
+        }
+
+        if ($guest->check_status == '1') {
+            return back()->with('info', 'Guest already checked in.');
+        }
+
+        // Force update check_status to mark as checked in
+        $guest->update(['check_status' => '1']);
+
+        return back()->with('success', 'Guest checked in successfully.');
+    }
+
+
+
 }

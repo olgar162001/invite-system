@@ -65,10 +65,17 @@
                                 <div class="mt-1">
                                     <a class="btn link-dark btn-link" href="{{ route('password.request') }}">
                                         {{ __('Forgot Your Password?') }}
-                                    </a>
+                                    </a><br/>
                                 @endif
 
                                     {{-- <a href="/register" class="link-body-emphasis mx-3">Register here</a> --}}
+
+                                    <a href="{{ route('social.redirect', 'google') }}" class="btn btn-danger">Login with Google</a><br/>
+                                    <a href="{{ url('/auth/facebook') }}" class="btn btn-primary">
+                                        <i class="fab fa-facebook"></i> Login with Facebook
+                                    </a>
+
+
                                 </div>    
                             </div>    
                         </div>

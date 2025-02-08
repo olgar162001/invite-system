@@ -15,7 +15,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth')->except(['confirm', 'deny', 'index','template']);
+        $this->middleware('auth'); // 🔒 Protects all functions in this controller
     }
 
     /**
