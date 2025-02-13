@@ -101,46 +101,56 @@
     </div>
 
     <!-- Modal for Adding a Guest -->
-    <div class="modal fade" id="guestModal" tabindex="-1" aria-labelledby="guestModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="guestModalLabel">Add Guest</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body bg-secondary-subtle">
-                    <form action="/guest/{{$event->id}}/create" method="post">
-                        @csrf
-                        <div class="form-group my-2">
-                            <label for="Name" class="form-label">Name</label>
-                            <input type="text" name="name" class="form-control" required>
-                        </div>
-                        <div class="form-group my-2">
-                            <label for="Title" class="form-label">Title</label>
-                            <input type="text" name="title" class="form-control" required>
-                        </div>
-                        <div class="form-group my-2">
-                            <label for="Email" class="form-label">Email</label>
-                            <input type="text" name="email" class="form-control" required>
-                        </div>
-                        <div class="form-group my-2">
-                            <label for="Phone" class="form-label">Phone</label>
-                            <input type="tel" name="phone" class="form-control" required>
-                        </div>
-                        <div class="form-group my-2">
-                            <label for="Type" class="form-label">Type</label>
-                            <select name="type" class="form-select">
-                                <option value="Single">Single</option>
-                                <option value="Double">Double</option>
-                            </select>
-                        </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-dark bg-gradient" data-bs-dismiss="modal">Close</button>
-                    <input type="submit" value="Add Guest" class="btn btn-success bg-gradient">
-                    </form>
-                </div>
+<div class="modal fade" id="guestModal" tabindex="-1" aria-labelledby="guestModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="guestModalLabel">Add Guest</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body bg-secondary-subtle">
+                <form action="/guest/{{$event->id}}/create" method="post" enctype="multipart/form-data">
+                    @csrf
+                    <div class="form-group my-2">
+                        <label for="Name" class="form-label">Name</label>
+                        <input type="text" name="name" class="form-control">
+                    </div>
+                    <div class="form-group my-2">
+                        <label for="Title" class="form-label">Title</label>
+                        <input type="text" name="title" class="form-control">
+                    </div>
+                    <div class="form-group my-2">
+                        <label for="Email" class="form-label">Email</label>
+                        <input type="text" name="email" class="form-control">
+                    </div>
+                    <div class="form-group my-2">
+                        <label for="Phone" class="form-label">Phone</label>
+                        <input type="tel" name="phone" class="form-control">
+                    </div>
+                    <div class="form-group my-2">
+                        <label for="Type" class="form-label">Type</label>
+                        <select name="type" class="form-select">
+                            <option value="Single">Single</option>
+                            <option value="Double">Double</option>
+                        </select>
+                    </div>
+                    
+                    <hr>
+
+                    <!-- Bulk Import Section -->
+                    <div class="form-group my-2">
+                        <label for="csv_file" class="form-label">Import Guests (CSV/Excel)</label>
+                        <input type="file" name="csv_file" class="form-control" accept=".csv,.xlsx">
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-dark bg-gradient" data-bs-dismiss="modal">Close</button>
+                        <input type="submit" value="Add Guest" class="btn btn-success bg-gradient">
+                    </div>
+                </form>
             </div>
         </div>
     </div>
+</div>
+
 @endsection

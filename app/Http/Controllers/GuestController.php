@@ -6,6 +6,8 @@ use App\Models\Event;
 use App\Models\Guest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\GuestsImport;
 
 class GuestController extends Controller
 {
@@ -43,6 +45,10 @@ class GuestController extends Controller
      */
     public function store(Request $request, string $id)
     {
+        if ($request->hasFile('csv_file')) {
+            return $this->importGuests($request, $id);
+        }
+
         $guest = new Guest();
         $guest->name = $request->name;
         $guest->title = $request->title;
@@ -51,13 +57,30 @@ class GuestController extends Controller
         $guest->type = $request->type;
         $guest->check_status = '0';
         $guest->status = '1';
-        $guest->invite_link = $this->generateRandomString(10); // Generate invite link
-        $guest->checklist_token = $this->generateChecklistToken(6); // Generate checklist token
+        $guest->invite_link = $this->generateRandomString(10);
+        $guest->checklist_token = $this->generateChecklistToken(6);
         $guest->user_id = auth()->id();
         $guest->event_id = $id;
         $guest->save();
 
         return redirect('/event/' . $id)->with('success', 'Guest Added');
+    }
+
+    /**
+     * Import guests from CSV or Excel.
+     */
+    public function importGuests(Request $request, $eventId)
+    {
+        $request->validate([
+            'csv_file' => 'required|mimes:csv,xlsx'
+        ]);
+
+        try {
+            Excel::import(new GuestsImport($eventId), $request->file('csv_file'));
+            return redirect('/event/' . $eventId)->with('success', 'Guests imported successfully.');
+        } catch (\Exception $e) {
+            return redirect('/event/' . $eventId)->with('error', 'Error importing guests: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -99,7 +122,6 @@ class GuestController extends Controller
             $guest->status = '1';
         }
 
-        // Ensure token remains unchanged unless manually updated
         if (!$guest->checklist_token) {
             $guest->checklist_token = $this->generateChecklistToken(6);
         }
@@ -134,32 +156,29 @@ class GuestController extends Controller
         return redirect()->back()->with('success', 'Guest Checked Successfully');
     }
 
-    
+    /**
+     * Search for a guest by token within an event.
+     */
     public function search(Request $request, $eventId)
     {
         $token = $request->input('token');
-    
-        // Get the event
-        $event = Event::where('id', $eventId)->first();
-    
+        $event = Event::find($eventId);
+
         if (!$event) {
             return back()->with('error', 'Event not found.');
         }
-    
-        // Search for a guest using the token within the event
+
         $guests = Guest::where('event_id', $eventId)
-                    ->where('checklist_token', $token)
-                    ->get();
-    
+                        ->where('checklist_token', $token)
+                        ->get();
+
         if ($guests->isEmpty()) {
             return redirect()->route('event.show', $eventId)->with('error', 'Guest not found.');
         }
-    
+
         return view('event.show')->with([
             'event' => $event,
             'guests' => $guests
         ]);
     }
-    
-
 }

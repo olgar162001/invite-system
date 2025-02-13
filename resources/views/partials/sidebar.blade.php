@@ -25,6 +25,10 @@
                 <li class="list-group-item list-group-item-action list-group-item-secondary p-2">
                     <a href="/card-template" class="nav-link p-1"><span class="fa fa-table-columns pe-2"></span>Card Template</a>
                 </li>
+
+                <li class="list-group-item list-group-item-action list-group-item-secondary p-2">
+                    <a href="/customers" class="nav-link p-1"><span class="fa fa-table-columns pe-2"></span>Manage Customer</a>
+                </li>
                 
                 {{-- <li class="list-group-item list-group-item-action list-group-item-secondary p-2">
                     <a href="/sales/create" class="nav-link p-1"><span class="fa fa-dollar-sign pe-2"></span>Input Sales</a>

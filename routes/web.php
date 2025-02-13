@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\GuestController;
 use App\Http\Controllers\WhatsAppController;
 use Laravel\Socialite\Facades\Socialite;
@@ -141,8 +142,16 @@ Route::post('/guest/{guest}/create', [GuestController::class, 'store']);
 Route::put('/guest/{event}', [GuestController::class,'update']);
 Route::delete('/guest/{event}', [GuestController::class, 'destroy']);
 Route::get('/guest/{guest}/check', [GuestController::class, 'check']);
+Route::post('/guest/{guest}/import', [GuestController::class, 'import'])->name('guest.import');
+
 
 Route::get('/profile', [HomeController::class, 'profile']);
 
 Route::post('/send-whatsapp', [WhatsAppController::class, 'sendMessage']);
 Route::get('/event/{event}/guest/search', [GuestController::class, 'search'])->name('guest.search');
+
+//Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/customers', [CustomerController::class, 'index'])->name('customers.index');
+    Route::post('/customers', [CustomerController::class, 'store'])->name('customers.store');
+    Route::delete('/customers/{customer}', [CustomerController::class, 'destroy'])->name('customers.destroy');
+//});

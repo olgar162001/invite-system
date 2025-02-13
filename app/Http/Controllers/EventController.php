@@ -5,10 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Event;
 use App\Models\Guest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class EventController extends Controller
 {
-
     public function __construct()
     {
         $this->middleware('auth');
@@ -29,7 +29,7 @@ class EventController extends Controller
      */
     public function create()
     {
-        return view('event/create');
+        return view('event.create');
     }
 
     /**
@@ -47,6 +47,9 @@ class EventController extends Controller
             'time' => 'required',
             'venue' => 'required',
             'location_name' => 'required',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'video' => 'nullable|mimes:mp4,mov,avi,wmv|max:10240',
+            'audio' => 'nullable|mimes:mp3,wav,ogg|max:5120',
         ]);
 
         $event = new Event;
@@ -62,6 +65,18 @@ class EventController extends Controller
         $event->location_link = $request->input('location_link');
         $event->contacts = $request->input('contacts');
         $event->user_id = auth()->id();
+
+        // Handle media uploads
+        if ($request->hasFile('image')) {
+            $event->image = $request->file('image')->store('events/images', 'public');
+        }
+        if ($request->hasFile('video')) {
+            $event->video = $request->file('video')->store('events/videos', 'public');
+        }
+        if ($request->hasFile('audio')) {
+            $event->audio = $request->file('audio')->store('events/audio', 'public');
+        }
+
         $event->save();
 
         return redirect('/event')->with('success', 'Event Created');
@@ -72,13 +87,10 @@ class EventController extends Controller
      */
     public function show(string $id)
     {
-        $event = Event::where('id', $id)->first();
+        $event = Event::findOrFail($id);
         $guests = Guest::where('event_id', $id)->get();
 
-        return view('event.show')->with([
-            'event' => $event,
-            'guests' => $guests
-        ]);
+        return view('event.show', compact('event', 'guests'));
     }
 
     /**
@@ -86,8 +98,8 @@ class EventController extends Controller
      */
     public function edit(string $id)
     {
-        $event = Event::find($id);
-        return view('event.edit')->with('event', $event);
+        $event = Event::findOrFail($id);
+        return view('event.edit', compact('event'));
     }
 
     /**
@@ -95,7 +107,23 @@ class EventController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $event = Event::find($id);
+        $event = Event::findOrFail($id);
+
+        $request->validate([
+            'event_name' => 'required',
+            'event_type' => 'required',
+            'event_host' => 'required',
+            'groom' => 'required',
+            'bride' => 'required',
+            'date' => 'required',
+            'time' => 'required',
+            'venue' => 'required',
+            'location_name' => 'required',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'video' => 'nullable|mimes:mp4,mov,avi,wmv|max:10240',
+            'audio' => 'nullable|mimes:mp3,wav,ogg|max:5120',
+        ]);
+
         $event->event_name = $request->input('event_name');
         $event->event_host = $request->input('event_host');
         $event->event_type = $request->input('event_type');
@@ -107,11 +135,33 @@ class EventController extends Controller
         $event->location_name = $request->input('location_name');
         $event->location_link = $request->input('location_link');
         $event->contacts = $request->input('contacts');
-        $event->user_id = auth()->id();
-        // $event->event_id = $id;
-        $event->update();
 
-        return redirect('/event')->with('success', 'Event Edited');
+        // Handle media updates
+        if ($request->hasFile('image')) {
+            // Delete old image if exists
+            if ($event->image) {
+                Storage::disk('public')->delete($event->image);
+            }
+            $event->image = $request->file('image')->store('events/images', 'public');
+        }
+
+        if ($request->hasFile('video')) {
+            if ($event->video) {
+                Storage::disk('public')->delete($event->video);
+            }
+            $event->video = $request->file('video')->store('events/videos', 'public');
+        }
+
+        if ($request->hasFile('audio')) {
+            if ($event->audio) {
+                Storage::disk('public')->delete($event->audio);
+            }
+            $event->audio = $request->file('audio')->store('events/audio', 'public');
+        }
+
+        $event->save();
+
+        return redirect('/event')->with('success', 'Event Updated');
     }
 
     /**
@@ -119,7 +169,19 @@ class EventController extends Controller
      */
     public function destroy(string $id)
     {
-        $event = Event::find($id);
+        $event = Event::findOrFail($id);
+
+        // Delete associated files if they exist
+        if ($event->image) {
+            Storage::disk('public')->delete($event->image);
+        }
+        if ($event->video) {
+            Storage::disk('public')->delete($event->video);
+        }
+        if ($event->audio) {
+            Storage::disk('public')->delete($event->audio);
+        }
+
         $event->delete();
 
         return redirect('/event')->with('success', 'Event Deleted');

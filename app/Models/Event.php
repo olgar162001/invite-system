@@ -21,7 +21,10 @@ class Event extends Model
     'date',
     'time',
     'contacts',
-    'user_id'
+    'user_id',
+    'image',
+    'video',
+    'audio'
     ];
 
     public function User(): BelongsTo
