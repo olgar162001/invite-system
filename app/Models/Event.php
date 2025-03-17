@@ -36,4 +36,10 @@ class Event extends Model
     {
         return $this->hasMany(Guest::class);
     }
+
+    public function customer()
+{
+    return $this->belongsTo(User::class, 'customer_id');
+}
+
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
+use App\Models\User;
 use App\Models\Guest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -20,8 +21,16 @@ class EventController extends Controller
     public function index()
     {
         $id = auth()->id();
-        $events = Event::where('user_id', $id)->get();
+        $role = User::where('id',$id)->value('role');
+        if($role==='admin'){
+            $events = Event::all();
+            
+        }else{
+            $events = Event::where('user_id', $id)->get();
+        }
+
         return view('event.index')->with('events', $events);
+       
     }
 
     /**
@@ -47,6 +56,7 @@ class EventController extends Controller
             'time' => 'required',
             'venue' => 'required',
             'location_name' => 'required',
+            'customer_id' => 'nullable|exists:users,id', // Ensure customer exists
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'video' => 'nullable|mimes:mp4,mov,avi,wmv|max:10240',
             'audio' => 'nullable|mimes:mp3,wav,ogg|max:5120',
@@ -64,7 +74,15 @@ class EventController extends Controller
         $event->location_name = $request->input('location_name');
         $event->location_link = $request->input('location_link');
         $event->contacts = $request->input('contacts');
-        $event->user_id = auth()->id();
+
+        // Determine the customer ID
+       /* if (auth()->user()->isAdmin()) { // Assuming an isAdmin() method in User model
+            $event->user_id = $request->input('user_id'); // Admin assigns a customer
+        } else {
+            $event->user_id = auth()->id(); // Customers create their own events
+        }*/
+
+        $event->user_id = auth()->id(); // Logged-in user creating the event
 
         // Handle media uploads
         if ($request->hasFile('image')) {
@@ -119,6 +137,7 @@ class EventController extends Controller
             'time' => 'required',
             'venue' => 'required',
             'location_name' => 'required',
+            'customer_id' => 'nullable|exists:users,id',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'video' => 'nullable|mimes:mp4,mov,avi,wmv|max:10240',
             'audio' => 'nullable|mimes:mp3,wav,ogg|max:5120',
@@ -136,9 +155,12 @@ class EventController extends Controller
         $event->location_link = $request->input('location_link');
         $event->contacts = $request->input('contacts');
 
+        if (auth()->user()->isAdmin()) {
+            $event->customer_id = $request->input('customer_id'); // Admin can update customer_id
+        }
+
         // Handle media updates
         if ($request->hasFile('image')) {
-            // Delete old image if exists
             if ($event->image) {
                 Storage::disk('public')->delete($event->image);
             }
@@ -186,4 +208,28 @@ class EventController extends Controller
 
         return redirect('/event')->with('success', 'Event Deleted');
     }
+
+
+    public function fetchEvents()
+    {
+        $events = Event::all();
+
+        // Convert events into JSON format required by Toast UI Calendar
+        $formattedEvents = $events->map(function ($event) {
+            return [
+                'id' => $event->id,
+                'calendarId' => '1',
+                'title' => $event->event_name ?? 'Unnamed Event',
+                'category' => 'time',
+                'dueDateClass' => '',
+                'start' => $event->date ? $event->date . 'T' . ($event->time ?? '00:00:00') : null,
+                'end' => $event->date ? $event->date . 'T' . ($event->time ?? '23:59:59') : null,
+                'body' => $event->event_type ?? 'No description',
+            ];
+        });
+
+        return response()->json($formattedEvents);
+    }
+    
+
 }

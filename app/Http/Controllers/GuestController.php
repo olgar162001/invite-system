@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\GuestsImport;
+use App\Jobs\SendInvitationJob;
 
 class GuestController extends Controller
 {
@@ -181,4 +182,25 @@ class GuestController extends Controller
             'guests' => $guests
         ]);
     }
+
+    public function sendInvitations(Request $request)
+    {
+        $guestIds = $request->input('guest_ids');
+
+        if (!$guestIds) {
+            return response()->json(['message' => 'No guests selected'], 400);
+        }
+
+        // Process sending invitations (email, SMS, WhatsApp, etc.)
+        foreach ($guestIds as $guestId) {
+            $guest = Guest::find($guestId);
+            if ($guest) {
+                // Send invitation logic here (e.g., email or WhatsApp)
+                dispatch(new SendInvitationJob($guest));
+            }
+        }
+
+        return response()->json(['message' => 'Invitations sent successfully'], 200);
+    }
+
 }

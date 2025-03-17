@@ -4,7 +4,7 @@ namespace App\Mail;
 
 namespace App\Mail;
 
-use App\Models\Customer;
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -14,12 +14,12 @@ class WelcomeMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $customer;
+    public $user;
     public $password;
 
-    public function __construct(Customer $customer, $password)
+    public function __construct(User $user, $password)
     {
-        $this->customer = $customer;
+        $this->user = $user;
         $this->password = $password;
     }
 
@@ -28,8 +28,8 @@ class WelcomeMail extends Mailable
         return $this->subject('Welcome to the Invitation System')
                     ->view('emails.welcome')
                     ->with([
-                        'name' => $this->customer->name,
-                        'email' => $this->customer->email,
+                        'name' => $this->user->name,
+                        'email' => $this->user->email,
                         'password' => $this->password,
                         'loginUrl' => url('/login'),
                     ]);

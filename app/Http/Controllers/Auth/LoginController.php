@@ -3,76 +3,98 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Laravel\Socialite\Facades\Socialite;
-use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use App\Models\User;
+
 
 
 class LoginController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles authenticating users for the application and
-    | redirecting them to your home screen. The controller uses a trait
-    | to conveniently provide its functionality to your applications.
-    |
-    */
 
-    use AuthenticatesUsers;
-
-    /**
-     * Where to redirect users after login.
-     *
-     * @var string
-     */
-    protected $redirectTo = RouteServiceProvider::HOME;
-
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('guest')->except('logout');
+    public function showLoginForm(){
+        return view('auth.login');
     }
 
-    
 
-public function googleCallback()
-{
-    try {
-        // Get user details from Google
-        $socialUser = Socialite::driver('google')->stateless()->user();
+    public function login(Request $request)
+    {
+        $credentials = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required'
+        ]);
 
-        // Check if user exists in the database
-        $user = User::where('email', $socialUser->getEmail())->first();
+        if (Auth::attempt($credentials)) {
+            $user = Auth::user();
 
-        // If the user does not exist, create them
-        if (!$user) {
-            $user = User::create([
-                'name' => $socialUser->getName(),
-                'email' => $socialUser->getEmail(),
-                'provider' => 'google',
-                'provider_id' => $socialUser->getId(),
-                'password' => bcrypt(uniqid()), // Random password
-            ]);
+            if ($user->status == 0) {
+                Auth::logout();
+                return back()->withErrors(['message' => 'Your account is inactive. Contact support.']);
+            }
+
+            if ($user->isAdmin()) {
+                return redirect()->route('home'); // Redirect admin
+            }
+
+            return redirect()->route('home'); // Redirect customer
         }
 
-        // Log the user in
-        Auth::login($user);
-
-        // Redirect to the home/dashboard page
-        return redirect('/home'); // Change this to your desired route
-
-    } catch (\Exception $e) {
-        return redirect('/login')->with('error', 'Something went wrong.');
+        return back()->withErrors(['email' => 'Invalid login credentials.']);
     }
-}
+
+
+    public function redirectToProvider($provider)
+    {
+        return Socialite::driver($provider)->redirect();
+    }
+
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('login')->with('success', 'You have been logged out.');
+    }
+
+
+    /**
+     * Handle the callback from the social authentication provider.
+     */
+    public function handleProviderCallback($provider)
+    {
+        $socialUser = Socialite::driver($provider)->user();
+
+        // Find or create user
+        $user = User::updateOrCreate(
+            ['email' => $socialUser->getEmail()],
+            [
+                'name' => $socialUser->getName(),
+                'provider_id' => $socialUser->getId(),
+                'provider' => $provider,
+                'password' => bcrypt(uniqid()), // Generate a random password
+            ]
+        );
+
+        // Authenticate the user
+        Auth::login($user, true);
+
+        // Redirect to home if authentication is successful
+        return redirect()->route('home')->with('success', 'Logged in successfully!');
+    }
+
+
+    public function impersonateUser($customerId)
+    {  
+        $customer = User::where('role', 'customer')->findOrFail($customerId);
+        
+        Auth::logout(); // Log out the admin
+        Auth::login($customer); // Log in as the customer
+
+        return redirect()->route('home')->with('success', 'You are now logged in as a customer.');
+    }
 
 }
