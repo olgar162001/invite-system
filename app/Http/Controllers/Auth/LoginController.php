@@ -52,13 +52,17 @@ class LoginController extends Controller
 
     public function logout(Request $request)
     {
-        Auth::logout();
+        if (session()->has('impersonate_admin_id')) {
+            return redirect()->route('stop.impersonation');
+        }
 
+        Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('login')->with('success', 'You have been logged out.');
+        return redirect('login');
     }
+
 
 
     /**
@@ -88,13 +92,34 @@ class LoginController extends Controller
 
 
     public function impersonateUser($customerId)
-    {  
+    {
         $customer = User::where('role', 'customer')->findOrFail($customerId);
-        
-        Auth::logout(); // Log out the admin
-        Auth::login($customer); // Log in as the customer
-
+    
+        // Store the admin ID in session before impersonation
+        session(['impersonate_admin_id' => auth()->id()]);
+    
+        // Log in as the customer
+        Auth::login($customer);
+    
         return redirect()->route('home')->with('success', 'You are now logged in as a customer.');
     }
+    
+    public function stopImpersonation()
+    {
+        $adminId = session('impersonate_admin_id');
+
+        if ($adminId) {
+            $admin = User::find($adminId);
+
+            if ($admin) {
+                Auth::login($admin); // Log back in as the admin
+            }
+
+            session()->forget('impersonate_admin_id'); // Clean up
+        }
+
+        return redirect()->route('home')->with('success', 'You are now back as admin.');
+    }
+
 
 }

@@ -11,35 +11,45 @@ class Event extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['event_name',
-    'event_host', 
-    'event_type', 
-    'groom', 
-    'bride', 
-    'location',
-    'venue',
-    'date',
-    'time',
-    'contacts',
-    'user_id',
-    'image',
-    'video',
-    'audio'
+    protected $fillable = [
+        'event_name',
+        'event_host', 
+        'event_type', 
+        'groom', 
+        'bride', 
+        'location',
+        'venue',
+        'date',
+        'time',
+        'contacts',
+        'user_id',
+        'image',
+        'video',
+        'audio',
+        'template_id'
     ];
 
-    public function User(): BelongsTo
+    // Relationship: Event belongs to a User
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function Guest(): HasMany
+    // Relationship: Event has many Guests
+    public function guests(): HasMany
     {
         return $this->hasMany(Guest::class);
     }
 
-    public function customer()
-{
-    return $this->belongsTo(User::class, 'customer_id');
-}
+    // Relationship: Event belongs to a customer (if used separately from user_id)
+    public function customer(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'customer_id');
+    }
 
+    // Relationship: Event uses a Template
+    public function template(): BelongsTo
+    {
+        return $this->belongsTo(Template::class);
+    }
 }
