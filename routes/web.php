@@ -11,6 +11,7 @@ use App\Http\Controllers\GuestController;
 use App\Http\Controllers\WhatsAppController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\Admin\TemplateController;
 
 /*
 |--------------------------------------------------------------------------
@@ -69,7 +70,6 @@ Route::middleware(['auth', 'isAdmin'])->group(function () {
 //});
 
 // Invitation Response Routes
-Route::get('/card-template', [HomeController::class, 'template']);
 Route::get('/card-template/{guest}', [GuestController::class, 'show']);
 Route::get('/card-confirm/{guest}/response', [HomeController::class, 'confirm']);
 Route::get('/card-deny/{guest}/response', [HomeController::class, 'deny']);
@@ -90,10 +90,29 @@ Route::get('/events', [CalendarController::class, 'index'])->name('events.index'
 Route::get('/impersonate/{customerId}', [LoginController::class, 'impersonateUser'])
     ->middleware(['auth', 'isAdmin'])
     ->name('admin.impersonate');
+Route::get('/stop-impersonation', [LoginController::class, 'stopImpersonation'])->name('stop.impersonation');
 
 
-    Route::middleware(['auth'])->group(function () {
+
+Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
     Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
     Route::post('/profile/update-password', [ProfileController::class, 'updatePassword'])->name('profile.updatePassword');
 });
+
+
+
+
+
+// Public/customer view-only route
+Route::get('/card-template', [TemplateController::class, 'index'])->name('templates.index');
+
+// Admin-only routes (optional: wrap in admin middleware)
+Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
+    Route::get('/templates/create', [TemplateController::class, 'create'])->name('templates.create');
+    Route::post('/templates', [TemplateController::class, 'store'])->name('templates.store');
+    Route::get('/templates/{template}/edit', [TemplateController::class, 'edit'])->name('templates.edit');
+    Route::put('/templates/{template}', [TemplateController::class, 'update'])->name('templates.update');
+    Route::delete('/templates/{template}', [TemplateController::class, 'destroy'])->name('templates.destroy');
+});
+

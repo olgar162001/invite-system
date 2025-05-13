@@ -1,141 +1,106 @@
 @extends('layouts.app')
 
 @section('content')
-    @include('partials.sidebar')
-{{-- <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Dashboard') }}</div>
+@include('partials.sidebar')
 
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
+<div class="container mt-4">
+    <h1 class="text-center text-dark">Dashboard</h1>
+    <hr style="margin: auto; width: 8%;">
 
-                    {{ __('You are logged in!') }}
-                </div>
+    {{-- Stats --}}
+    <div class="d-flex flex-wrap my-4 justify-content-center">
+        <div class="card m-2 shadow-sm" style="min-width: 250px;">
+            <div class="card-header bg-primary text-white">
+                <h5>Total Events</h5>
+            </div>
+            <div class="card-body">
+                <h3>{{ count($events) }}</h3>
+            </div>
+        </div>
+
+        <div class="card m-2 shadow-sm" style="min-width: 250px;">
+            <div class="card-header bg-info text-white">
+                <h5>Templates</h5>
+            </div>
+            <div class="card-body">
+                <h3>1</h3> {{-- Change this to dynamic if needed --}}
             </div>
         </div>
     </div>
-</div> --}}
 
-    <div class="container">
-        <h1 class="text-center text-dark">Dashboard</h1>
-        <hr style="margin: auto; width: 8%;">
-
-    {{-- Total Events --}}
-        <div class="container mx-2 d-flex flex-wrap my-2">
-            {{-- Card section --}}
-            <div class="card card-width border-0 m-2 bg-primary-subtle shadow">
-                <div class="card-header">
-                    <h2>Total Events</h2>
-                </div>
-                <div class="card-body py-4 d-flex justify-content-between">
-                    <div>
-                        <p class="card-text">Number of Events</p>                        
-                        <h3 class="card-text">{{count($events)}}</h3>
-                    </div>
-                </div>
-
-            </div>
-            {{-- End card section --}}
-
-            {{-- Card section --}}
-            <div class="card card-width m-2 border-0 bg-primary-subtle shadow">
-                <div class="card-header">
-                    <h2>Templates</h2>
-                </div>
-                <div class="card-body py-4 d-flex justify-content-between">
-                    <div>
-                        <p class="card-text">Number of Templates</p>
-                        
-                            <h3 class="card-text">1</h3>   
-                    </div>
-                </div>
-            </div>
-            {{-- End card section --}}
-            
-            {{-- Card section --}}
-            {{-- <div class="card m-2 card-width border-0 bg-primary-subtle shadow">
-                <div class="card-header d-flex align-items-center justify-content-between"> 
-                    <h2>Pending Events</h2>
-                </div>
-
-                <div class="card-body py-4 d-flex justify-content-between">
-                    <div>
-                        <p class="card-text">Number of Pending Events</p>
-                            <h3 class="card-text">N/A</h3>
-
-                    </div>
-                </div>
-            </div> --}}
-            {{-- End card section --}}
-
-        </div>
-
-        {{-- Table --}}
-        <div class="container mt-4">
-            <h2 class="text-center text-dark">Your Events</h2>
-
-            <div class="table-responsive-md container-fluid">
-                <table class="table table-rounded table-secondary table-striped table-hover">
-                    <tr>
-                        <th>s/n</th>
-                        <th>Event Name</th>
-                        <th>No. of Guests</th>
-                        <th>Venue</th>
-                        <th>Location</th>
-                        <th>Date</th>
-                        {{-- <th>Pending</th> --}}
-                        {{-- <th>Not Attending</th> --}}
-                        <th>Action</th>
-                    </tr>
-    
-                    <tbody class="table-group-divider">
-                        @if(count($events) > 0)
-                            @foreach ($events as $i => $event)
-                                <tr>
-                                    <td>{{$i + 1}}</td>
-                                    <td>{{$event->event_name}}</td>
-                                    <td>{{(count($event->guest))}}</td>
-                                    <td>{{$event->venue}}</td>
-                                    <td><a href="{{$event->location_link}}">{{$event->location_name}}</a></td>
-                                    <td>{{$event->date}}</td>
-                                    {{-- <td>{{$pending}}</td> --}}
-                                    {{-- <td>{{$not}}</td> --}}
-                                        <td class="d-flex align-items-center">
-                                            {{-- <a href="/event/{{$event->id}}/edit" class="text-success"><span class="fas fa-edit"></span></a>
-                                            <form action="/event/{{$event->id}}" method="POST">
-                                                {{ csrf_field() }}
-                                                {{method_field('DELETE')}}
-                                                <button type="submit" value="" class="fas fa-trash text-danger border-0 bg-transparent"></button>
-                                            </form> --}}
-                                            <a href="/event/{{$event->id}}" class="btn btn-success bg-gradient">Guests</a>
-                                        </td>
-                                    </tr>
-                            @endforeach
-                        @else
-                            <tr>
-                                <td></td>
-                                <td>No Events Found</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                {{-- <td></td> --}}
-                                {{-- <td></td> --}}
-                            </tr>    
-                        @endif
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        
+    {{-- Calendar --}}
+    <div class="mt-4">
+        <h4 class="text-center text-dark">Event Calendar</h4>
+        <div id="calendar" style="height: 550px; max-width: 100%; margin: auto;"></div>
     </div>
+</div>
 
+{{-- Modal for Event Details --}}
+<div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content shadow">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title" id="eventTitle"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Date:</strong> <span id="eventDate"></span></p>
+                <p><strong>Description:</strong></p>
+                <p id="eventDescription"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- Required JS --}}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<link rel="stylesheet" href="https://uicdn.toast.com/calendar/latest/toastui-calendar.min.css">
+<script src="https://uicdn.toast.com/calendar/latest/toastui-calendar.min.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const Calendar = tui.Calendar;
+    const calendar = new Calendar('#calendar', {
+        defaultView: 'month',
+        useFormPopup: false,
+        useDetailPopup: false,
+        taskView: false,
+        scheduleView: true,
+        template: {
+            monthDayname: function(dayname) {
+                return '<span class="calendar-dayname">' + dayname.label + '</span>';
+            }
+        }
+    });
+
+    fetch("/events")
+        .then(response => response.json())
+        .then(response => {
+            if (!response.success) throw new Error("Invalid data");
+
+            const schedules = response.data.map(event => ({
+                id: event.id.toString(),
+                calendarId: '1',
+                title: event.title,
+                category: 'time',
+                start: event.start,
+                end: event.end,
+                body: event.description || "No description."
+            }));
+
+            calendar.clear();
+            calendar.createEvents(schedules);
+        })
+        .catch(error => console.error('Error loading events:', error));
+
+    calendar.on('selectSchedule', function(event) {
+        const { title, start, body } = event.schedule;
+        document.getElementById('eventTitle').innerText = title;
+        document.getElementById('eventDate').innerText = new Date(start).toLocaleString();
+        document.getElementById('eventDescription').innerText = body;
+        $('#eventModal').modal('show');
+    });
+});
+</script>
 @endsection

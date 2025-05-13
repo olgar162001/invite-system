@@ -2,7 +2,7 @@
 
 @section('content')
 @include('partials.sidebar')
-    <div class="container  bg-secondary-subtle rounded p-4">
+    <div class="container bg-secondary-subtle rounded p-4">
         <h1 class="text-center">Create Event</h1>
         <div class="container px-4">
             <form action="/event" method="POST" class="form" enctype="multipart/form-data">
@@ -25,6 +25,17 @@
                     </select>
                 </div>
 
+                {{-- Template Selection --}}
+                <div class="form-group my-4">
+                    <label for="template_id" class="form-label">Invitation Template</label>
+                    <select name="template_id" class="form-select">
+                        <option value="">Select Template</option>
+                        @foreach($templates as $template)
+                            <option value="{{ $template->id }}">{{ $template->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
                 <div class="row my-4">
                     <div class="form-group col">
                         <label for="groom" class="form-label">Groom</label>
@@ -42,7 +53,7 @@
                         <label for="date" class="form-label">Date</label>
                         <input type="date" name="date" class="form-control">
                     </div>
-    
+
                     <div class="form-group col">
                         <label for="time" class="form-label">Time</label>
                         <input type="time" name="time" class="form-control">
@@ -58,12 +69,12 @@
                 <div class="row my-4">
                     <div class="form-group col">
                         <label for="location_name" class="form-label">Location Name</label>
-                        <input type="text" name="location_name" title="Provide Location Name eg Serena Hotel" class="form-control">
+                        <input type="text" name="location_name" class="form-control" title="Provide Location Name eg Serena Hotel">
                     </div>
 
                     <div class="form-group col">
                         <label for="location_link" class="form-label">Location Link</label>
-                        <input type="text" name="location_link" title="Please provide Google maps valid location link" class="form-control">
+                        <input type="text" name="location_link" class="form-control" title="Please provide Google maps valid location link">
                     </div>
                 </div>
 

@@ -8,8 +8,7 @@ use App\Models\Guest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\EventConfirmationMail;
-
+use Carbon\Carbon;
 class HomeController extends Controller
 {
     /**
@@ -23,15 +22,22 @@ class HomeController extends Controller
     /**
      * Show the application dashboard.
      */
+   
+
     public function index()
     {
         $id = auth()->id();
         $role = User::where('id', $id)->value('role'); // Get role as a single value
+        $today = Carbon::today(); // Current date
 
         if ($role === 'admin') {
-            $events = Event::all(); // Admin sees all events
+            // Admin sees all upcoming events
+            $events = Event::where('date', '>=', $today)->get();
         } else {
-            $events = Event::where('user_id', $id)->get(); // Customers see only their events
+            // Customers see only their upcoming events
+            $events = Event::where('user_id', $id)
+                        ->where('date', '>=', $today)
+                        ->get();
         }
 
         // Get guests attending these events
@@ -50,6 +56,7 @@ class HomeController extends Controller
             'not' => $not_guest
         ]);
     }
+
 
 
     public function profile()
