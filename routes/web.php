@@ -12,6 +12,7 @@ use App\Http\Controllers\WhatsAppController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Admin\TemplateController;
+use App\Http\Controllers\SmsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -114,5 +115,25 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/templates/{template}/edit', [TemplateController::class, 'edit'])->name('templates.edit');
     Route::put('/templates/{template}', [TemplateController::class, 'update'])->name('templates.update');
     Route::delete('/templates/{template}', [TemplateController::class, 'destroy'])->name('templates.destroy');
+
+
+   
+
+    Route::get('/sms/settings', [SmsController::class, 'settings'])->name('sms.settings');
+    Route::post('/sms/settings', [SmsController::class, 'updateSettings'])->name('sms.settings.update');
+
+    Route::get('/sms/balance', [SmsController::class, 'balance'])->name('sms.balance');
+
+    Route::get('/sms/assign', [SmsController::class, 'assign'])->name('sms.assign');
+    Route::get('/customer/{id}/events', function ($id) {
+        $events = Event::where('user_id', $id)->get(['id', 'title']);
+        return response()->json($events);
+    });    
+    Route::post('/sms/assign', [SmsController::class, 'assignToCustomer'])->name('sms.assign.store');
+
+
 });
 
+
+Route::post('/send-sms', [SmsController::class, 'SendInvaitation'])
+    ->middleware(['auth', 'check.sms.units']);

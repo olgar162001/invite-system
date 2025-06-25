@@ -32,6 +32,27 @@
                 </li>
             @endif
 
+            {{-- Only admin can manage templates --}}
+            @if(Auth::check() && Auth::user()->role === 'admin')
+                <li class="list-group-item list-group-item-action list-group-item-secondary p-2 ps-4">
+                    <a href="{{ route('sms.assign') }}" class="nav-link p-1"><span class="fa fa-plus-circle pe-2"></span>assign sms</a>
+                </li>
+            @endif
+
+            {{-- Only admin can manage templates --}}
+            @if(Auth::check() && Auth::user()->role === 'admin')
+                <li class="list-group-item list-group-item-action list-group-item-secondary p-2 ps-4">
+                    <a href="{{ route('sms.balance') }}" class="nav-link p-1"><span class="fa fa-plus-circle pe-2"></span>Sms Balance</a>
+                </li>
+            @endif
+
+            {{-- Only admin can manage templates --}}
+            @if(Auth::check() && Auth::user()->role === 'admin')
+                <li class="list-group-item list-group-item-action list-group-item-secondary p-2 ps-4">
+                    <a href="{{ route('sms.settings') }}" class="nav-link p-1"><span class="fa fa-plus-circle pe-2"></span>Sms Setting</a>
+                </li>
+            @endif
+
             <li class="list-group-item list-group-item-action list-group-item-secondary p-2">
                 <a href="/calendar" class="nav-link p-1"><span class="fa fa-calendar pe-2"></span>Calendar</a>
             </li>
