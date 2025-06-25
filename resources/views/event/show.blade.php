@@ -92,9 +92,9 @@
                                         <button type="button" class="fas fa-trash text-danger border-0 bg-transparent delete-btn"></button>
                                     </form>
 
-                                    <a href="#" onclick="sendWhatsAppMessage('{{ $guest->phone }}', '{{ $guest->invite_link }}')" class="btn btn-success bg-gradient">
+                                    <!--<a href="#" onclick="sendWhatsAppMessage('{{ $guest->phone }}', '{{ $guest->invite_link }}')" class="btn btn-success bg-gradient">
                                         Send invitation
-                                    </a>
+                                    </a>-->
                                     @if ($guest->status == '2')
                                         <a href="/guest/{{$guest->id}}/check" class="btn btn-dark mx-1 bg-gradient">Check</a>
                                     @endif

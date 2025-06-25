@@ -31,6 +31,7 @@ class Kernel extends HttpKernel
         'isAdmin' => \App\Http\Middleware\EnsureUserIsAdmin::class,
         'role.redirect' => \App\Http\Middleware\RedirectIfNotAuthorized::class, 
         'admin' => \App\Http\Middleware\AdminMiddleware::class, 
+        'check.sms.units' => \App\Http\Middleware\CheckSmsAllocation::class,
     ];
     
 

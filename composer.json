@@ -12,6 +12,7 @@
         "laravel/socialite": "^5.17",
         "laravel/tinker": "^2.8",
         "laravel/ui": "^4.2",
+        "livewire/livewire": "^3.5",
         "maatwebsite/excel": "^3.1",
         "spatie/laravel-permission": "^6.15",
         "twilio/sdk": "^8.3"
