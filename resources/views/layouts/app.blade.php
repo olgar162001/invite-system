@@ -49,6 +49,7 @@
 <script src="{{ asset('/resources/assets/js/soft-ui-dashboard.min.js')}}"></script>
 
 <script src="https://kit.fontawesome.com/ce9709e331.js" crossorigin="anonymous"></script>
+
 </body>
 
 </html>

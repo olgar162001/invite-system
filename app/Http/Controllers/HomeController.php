@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Mail;
 use Carbon\Carbon;
+use App\Helpers\SmsHelper;
 class HomeController extends Controller
 {
     /**
@@ -22,7 +23,7 @@ class HomeController extends Controller
     /**
      * Show the application dashboard.
      */
-   
+
 
     public function index()
     {
@@ -36,8 +37,8 @@ class HomeController extends Controller
         } else {
             // Customers see only their upcoming events
             $events = Event::where('user_id', $id)
-                        ->where('date', '>=', $today)
-                        ->get();
+                ->where('date', '>=', $today)
+                ->get();
         }
 
         // Get guests attending these events
@@ -48,12 +49,21 @@ class HomeController extends Controller
         $pending_guest = $guests->where('status', '1')->count();
         $not_guest = $guests->where('status', '0')->count();
 
+        $response = SmsHelper::fetchSmsBalance();
+
+        if (!$response['success']) {
+            return back()->withErrors(['msg' => $response['message']]);
+        }
+
+        $balance = $response['data']['sms_balance'] ?? 0;
+
         return view('home')->with([
             'events' => $events,
             'guest' => $guests,
             'attending' => $attending_guest,
             'pending' => $pending_guest,
-            'not' => $not_guest
+            'not' => $not_guest,
+            'balance' => $balance
         ]);
     }
 

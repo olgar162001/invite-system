@@ -18,7 +18,7 @@
                         <div class="row">
                             <div class="col-8 text-start">
                                 <div class="icon icon-shape bg-white shadow text-center border-radius-2xl">
-                                    <i class="ni ni-circle-08 text-dark text-gradient text-lg opacity-10"
+                                    <i class="fas fa-calendar-alt lh-base text-dark text-gradient text-lg opacity-10"
                                         aria-hidden="true"></i>
                                 </div>
                                 <h5 class="text-white font-weight-bolder mb-0 mt-3">
@@ -40,13 +40,58 @@
                         <div class="row">
                             <div class="col-8 text-start">
                                 <div class="icon icon-shape bg-white shadow text-center border-radius-2xl">
-                                    <i class="ni ni-circle-08 text-dark text-gradient text-lg opacity-10"
+                                    <i class="fas fa-layer-group lh-base text-dark text-gradient text-lg opacity-10"
                                         aria-hidden="true"></i>
                                 </div>
                                 <h5 class="text-white font-weight-bolder mb-0 mt-3">
                                     {{ count($events) }}
                                 </h5>
                                 <span class="text-white text-sm">Card Templates</span>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Customers Count --}}
+            <div class="col-lg-3 col-md-3 col-12 border-radius-sm">
+                <div class="card border-0 border-radius-sm">
+                    <span class="mask bg-dark opacity-10 border-radius-lg"></span>
+                    <div class="card-body p-3 position-relative">
+                        <div class="row">
+                            <div class="col-8 text-start">
+                                <div class="icon icon-shape bg-white shadow text-center border-radius-2xl">
+                                    <i class="fas fa-users lh-base text-dark text-gradient text-lg opacity-10"
+                                        aria-hidden="true"></i>
+                                </div>
+                                <h5 class="text-white font-weight-bolder mb-0 mt-3">
+                                    0
+                                </h5>
+                                <span class="text-white text-sm">Customers</span>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            {{-- SMS Count --}}
+            <div class="col-lg-3 col-md-3 col-12 border-radius-sm">
+                <div class="card border-0 border-radius-sm">
+                    <span class="mask bg-dark opacity-10 border-radius-lg"></span>
+                    <div class="card-body p-3 position-relative">
+                        <div class="row">
+                            <div class="col-8 text-start">
+                                <div class="icon icon-shape bg-white shadow text-center border-radius-2xl">
+                                    <i class="fas fa-sms lh-base text-dark text-gradient text-lg opacity-10"
+                                        aria-hidden="true"></i>
+                                </div>
+                                <h5 class="text-white font-weight-bolder mb-0 mt-3">
+                                    {{$balance}}
+                                </h5>
+                                <span class="text-white text-sm">Total SMS Units</span>
                             </div>
                             
                         </div>

@@ -82,9 +82,9 @@ class SmsController extends Controller
 
         $providerBalance = (int) $data['sms_balance'];
 
-        $balance = \App\Models\SmsBalance::firstOrCreate(['id' => 1]);
+        $balance = SmsBalance::firstOrCreate(['id' => 1]);
         $balance->total_units = $providerBalance;
-        $balance->available_units = $providerBalance - \App\Models\CustomerSmsBalance::sum('units_assigned');
+        $balance->available_units = $providerBalance - CustomerSmsBalance::sum('units_assigned');
         $balance->save();
 
         return view('sms.balance', ['balance' => $balance]);
