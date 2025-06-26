@@ -24,6 +24,24 @@
     }
 </script>
 
+<script>
+    function updateFavicon() {
+        const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const favicon = document.getElementById('favicon');
+
+        if (favicon) {
+            favicon.href = isDark ? '/favicon-dark.png' : '/favicon-light.png';
+        }
+    }
+
+    // Run on page load
+    updateFavicon();
+
+    // Listen for changes in theme
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateFavicon);
+</script>
+
+
 <!-- Github buttons -->
 <script async defer src="https://buttons.github.io/buttons.js"></script>
 <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->

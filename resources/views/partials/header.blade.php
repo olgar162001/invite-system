@@ -40,7 +40,7 @@
 
 
     {{-- Favicon --}}
-    <link rel="shortcut icon" href="{{asset('favicon.png')}}" type="image/x-icon">
+    <link id="favicon" rel="shortcut icon" href="{{asset('favicon-light.png')}}" type="image/x-icon">
 
     {{-- Custom CSS --}}
     <link rel="stylesheet" href="{{ asset('resources/css/custom.css') }}">
