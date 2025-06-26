@@ -24473,7 +24473,7 @@ html {
 }
 
 .sidenav[data-color=primary] .navbar-nav>.nav-item>.nav-link.active .icon {
-  background-image: linear-gradient(310deg, #f97316 0%, #f97316 100%);
+  background-color: #bfa27a;
 }
 
 .sidenav[data-color=secondary] .navbar-nav>.nav-item>.nav-link.active .icon {
@@ -24497,7 +24497,7 @@ html {
 }
 
 .sidenav[data-color=light] .navbar-nav>.nav-item>.nav-link.active .icon {
-  background-image: linear-gradient(310deg, #e3e3e7 0%, #e3e3e7 100%);
+  background-color: #bfa27a;
 }
 
 .sidenav[data-color=dark] .navbar-nav>.nav-item>.nav-link.active .icon {
@@ -24618,7 +24618,7 @@ html {
 }
 
 .navbar-vertical .navbar-nav>.nav-item .nav-link.active .icon {
-  background-image: linear-gradient(310deg, #f97316 0%, #f97316 100%);
+  background-color: #bfa27a;
   color: #fff;
 }
 
@@ -27933,6 +27933,10 @@ pre[class*=language-] {
 .ps__rail-y.ps--clicking .ps__thumb-y {
   background-color: #999;
   width: 11px;
+}
+
+span.bg-main {
+  background: #bfa27a !important;
 }
 
 /* MS supports */

@@ -143,7 +143,7 @@ class GuestController extends Controller
         $guest = Guest::find($id);
         $guest->delete();
 
-        return redirect('/event')->with('success', 'Guest Deleted');
+        return redirect()->back()->with('success', 'Guest Deleted');
     }
 
     /**
