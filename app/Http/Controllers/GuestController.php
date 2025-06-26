@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\GuestsImport;
 use App\Jobs\SendInvitationJob;
+use App\Jobs\SendSmsInvitationJob;
 
 class GuestController extends Controller
 {
@@ -183,6 +184,8 @@ class GuestController extends Controller
         ]);
     }
 
+    
+
     public function sendInvitations(Request $request)
     {
         $guestIds = $request->input('guest_ids');
@@ -191,16 +194,24 @@ class GuestController extends Controller
             return response()->json(['message' => 'No guests selected'], 400);
         }
 
-        // Process sending invitations (email, SMS, WhatsApp, etc.)
+        $message = $request->input('message', 'You are invited to our event. Please check your email.');
+
         foreach ($guestIds as $guestId) {
-            $guest = Guest::find($guestId);
+            $guest = \App\Models\Guest::find($guestId);
+
             if ($guest) {
-                // Send invitation logic here (e.g., email or WhatsApp)
-                dispatch(new SendInvitationJob($guest));
+                // Send email
+                dispatch(new \App\Jobs\SendInvitationJob($guest));
+
+                // Send SMS if phone exists
+                if ($guest->phone) {
+                    dispatch(new \App\Jobs\SendSmsInvitationJob($guest->phone, $message));
+                }
             }
         }
 
         return response()->json(['message' => 'Invitations sent successfully'], 200);
     }
+
 
 }

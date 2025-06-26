@@ -68,6 +68,7 @@ Route::middleware(['auth', 'isAdmin'])->group(function () {
     Route::put('{event}', [GuestController::class, 'update']);
     Route::delete('{event}', [GuestController::class, 'destroy']);
     Route::post('{guest}/import', [GuestController::class, 'import'])->name('guest.import');
+    Route::delete('{guest}', [GuestController::class, 'destroy']);
 //});
 
 // Invitation Response Routes
