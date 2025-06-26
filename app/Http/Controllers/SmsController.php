@@ -24,9 +24,10 @@ class SmsController extends Controller
             'provider_url' => 'required',
             'username' => 'required',
             'password' => 'required',
+            'template_message'=> 'required',
         ]);
 
-        SmsSetting::updateOrCreate(['id' => 1], $request->only('provider_url', 'username', 'password'));
+        SmsSetting::updateOrCreate(['id' => 1], $request->only('provider_url', 'username', 'password', 'template_message'));
 
         return redirect()->back()->with('success', 'SMS settings updated successfully!');
     }
