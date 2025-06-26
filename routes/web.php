@@ -66,7 +66,7 @@ Route::middleware(['auth', 'isAdmin'])->group(function () {
     Route::get('{guest}/edit', [GuestController::class, 'edit']);
     Route::post('{guest}/create', [GuestController::class, 'store'])->name('guest.store');
     Route::put('{event}', [GuestController::class, 'update']);
-    Route::delete('{event}', [GuestController::class, 'destroy']);
+    Route::delete('{guest}', [GuestController::class, 'destroy'])->name('guest.delete');
     Route::post('{guest}/import', [GuestController::class, 'import'])->name('guest.import');
 //});
 

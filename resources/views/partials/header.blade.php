@@ -18,7 +18,7 @@
     <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
     <!-- CSS Files -->
     <link id="pagestyle" href="{{asset('/resources/assets/css/soft-ui-dashboard.css')}}" rel="stylesheet" />
-    <link id="pagestyle" href="{{asset('/resources/assets/css/soft-ui-dashboard.min.css')}}" rel="stylesheet" />
+    {{-- <link id="pagestyle" href="{{asset('/resources/assets/css/soft-ui-dashboard.min.css')}}" rel="stylesheet" /> --}}
 
     <!-- Fonts -->
     {{-- <link rel="dns-prefetch" href="//fonts.bunny.net"> --}}

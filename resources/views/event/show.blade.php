@@ -86,7 +86,7 @@
                                     </a>
 
                                     <!-- Delete Form -->
-                                    <form action="/guest/{{$guest->id}}" method="POST" class="delete-form">
+                                    <form action="{{route('guest.delete', $guest->id)}}" method="POST" class="delete-form">
                                         @csrf
                                         @method('DELETE')
                                         <button type="button" class="fas fa-trash text-danger border-0 bg-transparent delete-btn"></button>
