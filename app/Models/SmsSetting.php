@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class SmsSetting extends Model
 {
-    protected $fillable = ['provider_url', 'username', 'password'];
+    protected $fillable = ['provider_url', 'username', 'password', 'template_message'];
 }

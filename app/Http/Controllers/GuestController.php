@@ -132,7 +132,7 @@ class GuestController extends Controller
         $guest->event_id = $id;
         $guest->update();
 
-        return redirect('/event/' . $id)->with('success', 'Guest Edited');
+        return redirect()->back()->with('success', 'Guest Edited');
     }
 
     /**
@@ -189,29 +189,46 @@ class GuestController extends Controller
     public function sendInvitations(Request $request)
     {
         $guestIds = $request->input('guest_ids');
+        $eventId = $request->input('event_id');
 
-        if (!$guestIds) {
-            return response()->json(['message' => 'No guests selected'], 400);
+        if (!$guestIds || !$eventId) {
+            return response()->json(['message' => 'Guests or Event not selected'], 400);
         }
 
-        $message = $request->input('message', 'You are invited to our event. Please check your email.');
+        $event = \App\Models\Event::find($eventId);
+        $setting = \App\Models\SmsSetting::first();
+
+        if (!$event || !$setting) {
+            return response()->json(['message' => 'Missing event or SMS settings'], 400);
+        }
+
+        $template = $setting->template_message ?? 'Hello {name}, you are invited to {event}. Click here: {link}';
 
         foreach ($guestIds as $guestId) {
             $guest = \App\Models\Guest::find($guestId);
 
             if ($guest) {
-                // Send email
+                // Email job
                 dispatch(new \App\Jobs\SendInvitationJob($guest));
 
-                // Send SMS if phone exists
                 if ($guest->phone) {
-                    dispatch(new \App\Jobs\SendSmsInvitationJob($guest->phone, $message));
+                                       
+
+                    // Replace placeholders
+                    $Message = str_replace(
+                        ['{$recipient_name}', '{$couple_names}', '{$event_date}', '{$venue_name}', '{$venue_area}','{$event_time}','{$code_number}','{$code_type}'],
+                        [$guest->name, $event->groom,$event->date,$event->venue,$event->location,$event->time,$guest->checklist_token, $guest->type,],
+                        $template
+                    );
+
+                    dispatch(new \App\Jobs\SendSmsInvitationJob($guest->phone, $Message));
                 }
             }
         }
 
         return response()->json(['message' => 'Invitations sent successfully'], 200);
     }
+
 
 
 }

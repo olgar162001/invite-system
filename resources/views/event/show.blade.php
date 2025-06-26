@@ -78,7 +78,7 @@
                                 </td>
 
                                 <td class="d-flex align-items-center">
-                                    <a href="/guest/{{$guest->id}}/edit" class="text-success">
+                                    <a href="{{route('guest.edit', $guest->id)}}" class="text-success">
                                         <span class="fas fa-edit"></span>
                                     </a>
                                     <a href="/card-template/{{$guest->id}}" class="text-warning-emphasis mx-1" title="View Card">

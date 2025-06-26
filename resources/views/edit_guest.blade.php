@@ -14,7 +14,7 @@
                 <div class="py-3 text-center"><h2>Edit Guest Details</h2></div>
 
                 <div class="card-body shadow py-5">
-                    <form method="POST" action="/guest/{{$guest->id}}">
+                    <form method="POST" action="{{route('guest.update', $guest->id)}}">
                         
                         {{ csrf_field() }}
                         {{method_field('PUT')}}
