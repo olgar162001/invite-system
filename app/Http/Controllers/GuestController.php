@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use App\Models\Guest;
+use App\Models\SmsSetting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
@@ -132,7 +133,7 @@ class GuestController extends Controller
         $guest->event_id = $id;
         $guest->update();
 
-        return redirect()->back()->with('success', 'Guest Edited');
+        return redirect('event.show')->with('success', 'Guest Edited');
     }
 
     /**
@@ -195,40 +196,37 @@ class GuestController extends Controller
             return response()->json(['message' => 'Guests or Event not selected'], 400);
         }
 
-        $event = \App\Models\Event::find($eventId);
-        $setting = \App\Models\SmsSetting::first();
+        $event = Event::find($eventId);
+        $setting = SmsSetting::first();
 
         if (!$event || !$setting) {
             return response()->json(['message' => 'Missing event or SMS settings'], 400);
         }
 
-        $template = $setting->template_message ?? 'Hello {name}, you are invited to {event}. Click here: {link}';
+        $template = $setting->template_message ?? '';
 
         foreach ($guestIds as $guestId) {
-            $guest = \App\Models\Guest::find($guestId);
+            $guest = Guest::find($guestId);
+            
 
             if ($guest) {
-                // Email job
-                dispatch(new \App\Jobs\SendInvitationJob($guest));
+                // Send email
+                dispatch(new SendInvitationJob($guest));
 
                 if ($guest->phone) {
-                                       
-
-                    // Replace placeholders
-                    $Message = str_replace(
-                        ['{$recipient_name}', '{$couple_names}', '{$event_date}', '{$venue_name}', '{$venue_area}','{$event_time}','{$code_number}','{$code_type}'],
-                        [$guest->name, $event->groom,$event->date,$event->venue,$event->location,$event->time,$guest->checklist_token, $guest->type,],
+                    // Replace {{placeholders}} in the template
+                    $message = str_replace(
+                        ['{{recipient_name}}', '{{couple_names}}', '{{event_date}}', '{{venue_name}}', '{{venue_area}}', '{{event_time}}', '{{code_number}}', '{{code_type}}'],
+                        [$guest->name, $event->groom, $event->date, $event->venue, $event->location, $event->time, $guest->checklist_token, $guest->type],
                         $template
                     );
 
-                    dispatch(new \App\Jobs\SendSmsInvitationJob($guest->phone, $Message));
+                    // Send SMS job
+                    dispatch(new SendSmsInvitationJob($guest->phone, $message));
                 }
             }
         }
 
         return response()->json(['message' => 'Invitations sent successfully'], 200);
     }
-
-
-
 }

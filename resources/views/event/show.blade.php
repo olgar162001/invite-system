@@ -35,6 +35,9 @@
             @endif
         </div>
 
+        <div id="guestSection" data-event-id="{{ $event->id }}">
+
+
         <!-- Button for Sending Invitations -->
         <button id="sendInvitesBtn" class="btn btn-success bg-gradient m-4">Send Invitations</button>
 
@@ -183,7 +186,8 @@
         });
 
         // Handle Sending Invitations
-        document.getElementById("sendInvitesBtn").addEventListener("click", function() {
+        document.getElementById("sendInvitesBtn").onclick = null;
+        document.getElementById("sendInvitesBtn").addEventListener("click", function () {
             let selectedGuests = [];
             document.querySelectorAll(".guestCheckbox:checked").forEach(checkbox => {
                 selectedGuests.push(checkbox.value);
@@ -194,14 +198,19 @@
                 return;
             }
 
-            // Send POST request to Laravel route
+            // Grab event ID from data attribute
+            const eventId = document.getElementById("guestSection").dataset.eventId;
+
             fetch("{{ route('send.invitations') }}", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                     "X-CSRF-TOKEN": "{{ csrf_token() }}"
                 },
-                body: JSON.stringify({ guest_ids: selectedGuests })
+                body: JSON.stringify({
+                    guest_ids: selectedGuests,
+                    event_id: eventId
+                })
             })
             .then(response => response.json())
             .then(data => {
