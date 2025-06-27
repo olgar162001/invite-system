@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+@section('title', 'Events')
     @include('partials.sidebar')
     <div class="container">
         <h1 class="text-center">Events</h1>
@@ -14,8 +15,8 @@
 
                 <div class="row">
                     <div class="col-12">
-                        <div class="card mb-4 border-0">
-                            <div class="card-header pb-0 border-0">
+                        <div class="card mb-4 shadow">
+                            <div class="card-header pb-0">
                                 <h6>Events Table</h6>
                             </div>
                             <div class="card-body px-0 pt-0 pb-2">
@@ -78,10 +79,11 @@
                                                             </a>
                                                         </td>
                                                         <td class="text-center">
-                                                            <p class="text-xs font-weight-bold mb-0">{{ $event->template->name ?? 'N/A' }}</p>
+                                                            <p class="text-xs font-weight-bold mb-0">
+                                                                {{ $event->template->name ?? 'N/A' }}</p>
                                                         </td>
-                                                        <td class="text-sm">
-                                                            <div class="d-flex align-items-center gap-2">
+                                                        <td class="text-sm d-flex align-items-center">
+                                                            <div class="d-flex align-items-center gap-2 justify-content-center">
                                                                 <a href="{{ url('/event/' . $event->id . '/edit') }}"
                                                                     class="text-success" title="Edit">
                                                                     <i class="fas fa-edit"></i>
@@ -96,7 +98,7 @@
                                                                     </button>
                                                                 </form>
                                                                 <a href="{{ url('/event/' . $event->id) }}"
-                                                                    class="btn btn-sm btn-success bg-gradient" title="Guests">
+                                                                    class="btn btn-sm btn-success mt-3 bg-gradient" title="Guests">
                                                                     Guests
                                                                 </a>
                                                             </div>

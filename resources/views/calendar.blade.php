@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+@section('title', 'Calendar')
 @include('partials.sidebar')
 
 <div class="container">

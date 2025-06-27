@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+@section('title', 'SMS Balance')
     @include('partials.sidebar')
     <div class="container mt-4">
         <h3>SMS Unit Balance</h3>

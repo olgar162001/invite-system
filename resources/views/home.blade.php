@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+@section('title', 'Dashboard')
     @include('partials.sidebar')
 
     <div class="container mt-4">
@@ -26,7 +27,7 @@
                                 </h5>
                                 <span class="text-white text-sm">Total Events</span>
                             </div>
-                            
+
                         </div>
                     </div>
                 </div>
@@ -48,7 +49,7 @@
                                 </h5>
                                 <span class="text-white text-sm">Card Templates</span>
                             </div>
-                            
+
                         </div>
                     </div>
                 </div>
@@ -70,7 +71,7 @@
                                 </h5>
                                 <span class="text-white text-sm">Customers</span>
                             </div>
-                            
+
                         </div>
                     </div>
                 </div>
@@ -93,7 +94,7 @@
                                 </h5>
                                 <span class="text-white text-sm">Total SMS Units</span>
                             </div>
-                            
+
                         </div>
                     </div>
                 </div>

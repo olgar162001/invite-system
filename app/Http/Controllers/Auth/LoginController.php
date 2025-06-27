@@ -13,7 +13,13 @@ use App\Models\User;
 class LoginController extends Controller
 {
 
-    public function showLoginForm(){
+    public function __construct()
+    {
+        $this->middleware('guest')->only('showLoginForm');
+    }
+
+    public function showLoginForm()
+    {
         return view('auth.login');
     }
 
@@ -60,7 +66,7 @@ class LoginController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('login');
+        return redirect('login')->with('status', 'You have been logged out successfully.');
     }
 
 
@@ -94,16 +100,16 @@ class LoginController extends Controller
     public function impersonateUser($customerId)
     {
         $customer = User::where('role', 'customer')->findOrFail($customerId);
-    
+
         // Store the admin ID in session before impersonation
         session(['impersonate_admin_id' => auth()->id()]);
-    
+
         // Log in as the customer
         Auth::login($customer);
-    
+
         return redirect()->route('home')->with('success', 'You are now logged in as a customer.');
     }
-    
+
     public function stopImpersonation()
     {
         $adminId = session('impersonate_admin_id');

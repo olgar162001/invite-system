@@ -1,6 +1,7 @@
 @extends('layouts.auth_app')
 
 @section('content')
+@section('title', 'Login')
 
   <div class="page-header min-vh-75">
     <div class="container">
@@ -32,7 +33,12 @@
           <label class="form-check-label" for="rememberMe">Remember me</label>
           </div>
           <div class="text-center">
-          <button type="submit" class="btn bg-gradient-info w-100 mt-4 mb-0">Sign in</button>
+
+          <button type="submit" id="login-btn" class="btn btn-md bg-gradient-info w-100 mt-4 mb-0 fs-6">
+            <span class="btn-text">Login</span>
+            <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+          </button>
+
           </div>
         </form>
         </div>
@@ -45,10 +51,11 @@
       </div>
       </div>
       <div class="col-md-6 mt-5">
-      <img src="{{asset('resources/NiaEvent-laptop.png')}}" alt="" style="padding-top: 6.2rem; margin-right: 3rem;" width="650">
+      <img src="{{asset('resources/NiaEvent-laptop.png')}}" alt="" style="padding-top: 6.2rem; margin-right: 3rem;"
+        width="650">
       {{-- <div class="oblique position-absolute top-0 h-100 d-md-block d-none me-n8"> --}}
 
-      {{-- </div> --}}
+        {{-- </div> --}}
       </div>
     </div>
     </div>

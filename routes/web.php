@@ -26,10 +26,12 @@ use App\Http\Controllers\SmsController;
 // Public Routes
 Route::get('/', function () {
     return view('auth.login');
-});
+})->middleware('guest');
 
 // Authentication Routes
-Auth::routes();
+// Route::middleware('guest')->group(function () {
+    Auth::routes();
+// });
 
 // Social Authentication Routes
 Route::prefix('auth')->group(function () {
@@ -63,11 +65,11 @@ Route::middleware(['auth', 'isAdmin'])->group(function () {
 });
 
 //Route::middleware(['guest'])->group(function () {
-    Route::get('{guest}/edit', [GuestController::class, 'edit'])->name('guest.edit');
-    Route::post('{guest}/create', [GuestController::class, 'store'])->name('guest.store');
-    Route::put('{guest}', [GuestController::class, 'update'])->name('guest.update');
-    Route::delete('{guest}', [GuestController::class, 'destroy'])->name('guest.delete');
-    Route::post('{guest}/import', [GuestController::class, 'import'])->name('guest.import');
+Route::get('{guest}/edit', [GuestController::class, 'edit'])->name('guest.edit');
+Route::post('{guest}/create', [GuestController::class, 'store'])->name('guest.store');
+Route::put('{guest}', [GuestController::class, 'update'])->name('guest.update');
+Route::delete('{guest}', [GuestController::class, 'destroy'])->name('guest.delete');
+Route::post('{guest}/import', [GuestController::class, 'import'])->name('guest.import');
 //});
 
 // Invitation Response Routes
@@ -117,7 +119,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::delete('/templates/{template}', [TemplateController::class, 'destroy'])->name('templates.destroy');
 
 
-   
+
 
     Route::get('/sms/settings', [SmsController::class, 'settings'])->name('sms.settings');
     Route::post('/sms/settings', [SmsController::class, 'updateSettings'])->name('sms.settings.update');
@@ -128,7 +130,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/customer/{id}/events', function ($id) {
         $events = Event::where('user_id', $id)->get(['id', 'title']);
         return response()->json($events);
-    });    
+    });
     Route::post('/sms/assign', [SmsController::class, 'assignToCustomer'])->name('sms.assign.store');
 
 

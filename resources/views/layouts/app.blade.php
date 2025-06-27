@@ -41,6 +41,17 @@
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateFavicon);
 </script>
 
+{{-- Preloader --}}
+<script>
+    window.addEventListener('load', function () {
+        const preloader = document.getElementById('page-preloader');
+        if (preloader) {
+            preloader.style.display = 'none';
+        }
+    });
+</script>
+
+
 
 <!-- Github buttons -->
 <script async defer src="https://buttons.github.io/buttons.js"></script>

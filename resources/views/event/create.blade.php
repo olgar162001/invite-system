@@ -1,8 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
+@section('title', 'Create Event')
 @include('partials.sidebar')
-    <div class="container bg-secondary-subtle rounded p-4">
+    <div class="container rounded p-4">
         <h1 class="text-center">Create Event</h1>
         <div class="container px-4">
             <form action="/event" method="POST" class="form" enctype="multipart/form-data">
