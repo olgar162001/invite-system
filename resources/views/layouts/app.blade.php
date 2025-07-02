@@ -1,8 +1,8 @@
 @include('partials.header')
 <main class="py-4">
-    <div class="extra-side-bar col-md-9">
+    {{-- <div class="extra-side-bar col-md-9">
         @include('partials.messages')
-    </div>
+    </div> --}}
     <div class="main-bar">
         @include('partials.navbar')
         @yield('content')
@@ -60,6 +60,31 @@
 <script src="{{ asset('/resources/assets/js/soft-ui-dashboard.min.js')}}"></script>
 
 <script src="https://kit.fontawesome.com/ce9709e331.js" crossorigin="anonymous"></script>
+
+<!-- jQuery (required by Toastr) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Toastr JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+
+<script>
+    @if(Session::has('success'))
+        toastr.success("{{ Session::get('success') }}");
+    @endif
+
+    @if(Session::has('error'))
+        toastr.error("{{ Session::get('error') }}");
+    @endif
+
+    @if(Session::has('info'))
+        toastr.info("{{ Session::get('info') }}");
+    @endif
+
+    @if(Session::has('warning'))
+        toastr.warning("{{ Session::get('warning') }}");
+    @endif
+</script>
 
 </body>
 

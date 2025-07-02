@@ -5,9 +5,7 @@
     @include('../partials.sidebar')
     <div class="container">
         <h1 class="text-center">Templates</h1>
-        @if(session('success'))
-            <div class="alert alert-success">{{ session('success') }}</div>
-        @endif
+        
         @if(Auth::check() && Auth::user()->role === 'admin')
             <div class="mb-3">
                 <a href="{{ route('templates.create') }}" class="btn btn-primary">Create New Template</a>
