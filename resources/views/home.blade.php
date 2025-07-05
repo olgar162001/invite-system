@@ -110,11 +110,15 @@
             </div> --}}
         </div>
 
-        {{-- Calendar --}}
-        <div class="mt-4">
+        {{-- Full Calendar JS--}}
+        <div class="mt-5">
+            <div id="calendar"></div>
+        </div>
+
+        {{-- <div class="mt-4">
             <h4 class="text-center text-dark">Event Calendar</h4>
             <div id="calendar" style="height: 550px; max-width: 100%; margin: auto;"></div>
-        </div>
+        </div> --}}
     </div>
 
     {{-- Modal for Event Details --}}
@@ -140,6 +144,7 @@
     <link rel="stylesheet" href="https://uicdn.toast.com/calendar/latest/toastui-calendar.min.css">
     <script src="https://uicdn.toast.com/calendar/latest/toastui-calendar.min.js"></script>
 
+    {{-- ToastUI Calendar --}}
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const Calendar = tui.Calendar;
@@ -185,4 +190,5 @@
             });
         });
     </script>
+
 @endsection

@@ -50,8 +50,18 @@ class EventController extends Controller
         ]);
 
         $event = new Event($request->only([
-            'event_name', 'event_host', 'event_type', 'groom', 'bride', 'date',
-            'time', 'venue', 'location_name', 'location_link', 'contacts', 'template_id'
+            'event_name',
+            'event_host',
+            'event_type',
+            'groom',
+            'bride',
+            'date',
+            'time',
+            'venue',
+            'location_name',
+            'location_link',
+            'contacts',
+            'template_id'
         ]));
 
         $event->user_id = auth()->id();
@@ -105,8 +115,18 @@ class EventController extends Controller
         ]);
 
         $event->fill($request->only([
-            'event_name', 'event_host', 'event_type', 'groom', 'bride', 'date',
-            'time', 'venue', 'location_name', 'location_link', 'contacts', 'template_id'
+            'event_name',
+            'event_host',
+            'event_type',
+            'groom',
+            'bride',
+            'date',
+            'time',
+            'venue',
+            'location_name',
+            'location_link',
+            'contacts',
+            'template_id'
         ]));
 
         if (auth()->user()->isAdmin()) {
@@ -116,7 +136,8 @@ class EventController extends Controller
         // Handle media updates
         foreach (['image', 'video', 'audio'] as $fileType) {
             if ($request->hasFile($fileType)) {
-                if ($event->$fileType) Storage::disk('public')->delete($event->$fileType);
+                if ($event->$fileType)
+                    Storage::disk('public')->delete($event->$fileType);
                 $event->$fileType = $request->file($fileType)->store("events/{$fileType}s", 'public');
             }
         }
@@ -131,7 +152,8 @@ class EventController extends Controller
         $event = Event::findOrFail($id);
 
         foreach (['image', 'video', 'audio'] as $fileType) {
-            if ($event->$fileType) Storage::disk('public')->delete($event->$fileType);
+            if ($event->$fileType)
+                Storage::disk('public')->delete($event->$fileType);
         }
 
         $event->delete();
@@ -157,5 +179,20 @@ class EventController extends Controller
         });
 
         return response()->json($formattedEvents);
+    }
+
+    // JSON feed for FullCalendar
+    public function feed()
+    {
+        $events = Event::all()->map(function ($event) {
+            return [
+                'id' => $event->id,
+                'title' => $event->title,
+                'start' => $event->date . ' ' . $event->time, // adjust columns to your DB
+                'description' => $event->description,
+            ];
+        });
+
+        return response()->json($events);
     }
 }

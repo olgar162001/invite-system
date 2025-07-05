@@ -216,6 +216,7 @@
             document.getElementById("sendInvitesBtn").onclick = null;
             document.getElementById("sendInvitesBtn").addEventListener("click", function () {
                 let selectedGuests = [];
+
                 document.querySelectorAll(".guestCheckbox:checked").forEach(checkbox => {
                     selectedGuests.push(checkbox.value);
                 });
@@ -227,6 +228,9 @@
 
                 // Grab event ID from data attribute
                 const eventId = document.getElementById("guestSection").dataset.eventId;
+                
+                const sendBtn = document.getElementById("sendInvitesBtn");
+                sendBtn.disabled = true;
 
                 fetch("{{ route('send.invitations') }}", {
                     method: "POST",
@@ -241,7 +245,8 @@
                 })
                     .then(response => response.json())
                     .then(data => {
-                        alert("Invitations sent successfully!");
+                        alert('Invitation Sent Successfully: ' + data.message);
+                        // console.log(data);
                     })
                     .catch(error => {
                         console.error("Error:", error);

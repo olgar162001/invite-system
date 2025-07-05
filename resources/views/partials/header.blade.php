@@ -54,7 +54,10 @@
 
     <!-- Toastr CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
-    
+
+    <!-- FullCalendar CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet" />
+
     {{--
     <link id="pagestyle" href="{{asset('/resources/assets/css/soft-ui-dashboard.min.css')}}" rel="stylesheet" /> --}}
 

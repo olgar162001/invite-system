@@ -6,7 +6,7 @@
 
 <div class="container">
     <h2 class="text-center">Event Calendar</h2>
-    <div id="calendar" style="height: 600px;"></div>
+    <div id="calendar"></div>
 </div>
 
 <!-- Event Details Modal -->
