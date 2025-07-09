@@ -18,6 +18,9 @@ class EventController extends Controller
 
     public function index()
     {
+
+        // return abort(500);
+
         $user = auth()->user();
         $events = $user->isAdmin() ? Event::all() : Event::where('user_id', $user->id)->get();
 

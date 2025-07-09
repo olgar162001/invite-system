@@ -54,9 +54,13 @@
     @if(Session::has('warning'))
         toastr.warning("{{ Session::get('warning') }}");
     @endif
+
+    @if ($errors->any())
+        @foreach ($errors->all() as $error)
+            toastr.error("{{ $error }}");
+        @endforeach
+    @endif
 </script>
-
-
 </body>
 
 </html>
