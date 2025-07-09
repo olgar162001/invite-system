@@ -39,12 +39,14 @@ class UserController extends Controller
         return redirect()->route('customers.index')->with('success', 'Customer added successfully.');
     }
 
-    public function edit(User $user)
+    public function edit(string $id)
     {
-        return view('customers.edit', compact('user'));
+        $customers = User::findorfail($id);
+
+        return view('customers.edit', compact('customers'));
     }
 
-    public function update(Request $request, User $user)
+    public function update(Request $request, string $d)
     {
         $request->validate([
             'name' => 'required|string|max:255',
@@ -61,8 +63,9 @@ class UserController extends Controller
         return redirect()->route('customers.index')->with('success', 'Customer updated successfully.');
     }
 
-    public function destroy(User $user)
+    public function destroy(string $id)
     {
+        $user= User::findOrFail($id);
         $user->delete();
         return redirect()->route('customers.index')->with('success', 'Customer deleted successfully.');
     }

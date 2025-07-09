@@ -56,7 +56,7 @@ Route::resource('/event', EventController::class);
 //});
 
 Route::middleware(['auth', 'isAdmin'])->group(function () {
-    Route::resource('customers', UserController::class);
+    Route::resource('/customers', UserController::class);
     Route::get('{guest}/check', [GuestController::class, 'check']);
 
     Route::get('/calendar', function () {

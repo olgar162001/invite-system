@@ -67,11 +67,11 @@
                                                 </span>
                                             </td>
                                             <td class="text-sm d-flex align-items-center justify-content-center gap-2">
-                                                <a href="{{ route('customers.edit', $customer) }}" class="text-warning"
+                                                <a href="{{  url('/customers/' . $customer->id . '/edit') }}" class="text-warning"
                                                     title="Edit">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
-                                                <form action="{{ route('customers.destroy', $customer) }}" method="POST"
+                                                <form action="{{ url('/customers/'. $customer->id) }}" method="POST"
                                                     onsubmit="return confirm('Are you sure you want to delete this customer?')">
                                                     @csrf
                                                     @method('DELETE')
