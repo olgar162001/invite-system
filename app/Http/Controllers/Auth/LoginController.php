@@ -40,10 +40,10 @@ class LoginController extends Controller
             }
 
             if ($user->isAdmin()) {
-                return redirect()->route('home'); // Redirect admin
+                return redirect()->route('home')->with('success', 'Login Successful'); // Redirect admin
             }
 
-            return redirect()->route('home'); // Redirect customer
+            return redirect()->route('home')->with('success', 'Login Successful'); // Redirect customer
         }
 
         return back()->withErrors(['email' => 'Invalid login credentials.']);
@@ -66,7 +66,7 @@ class LoginController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('login')->with('status', 'You have been logged out successfully.');
+        return redirect('login')->with('success', 'Logged out successfully.');
     }
 
 

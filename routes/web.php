@@ -30,7 +30,7 @@ Route::get('/', function () {
 
 // Authentication Routes
 // Route::middleware('guest')->group(function () {
-    Auth::routes();
+Auth::routes();
 // });
 
 // Social Authentication Routes
@@ -133,9 +133,11 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     });
     Route::post('/sms/assign', [SmsController::class, 'assignToCustomer'])->name('sms.assign.store');
 
-
 });
 
 
 Route::post('/send-sms', [SmsController::class, 'SendInvaitation'])
     ->middleware(['auth', 'check.sms.units']);
+
+    // Show events on Calendar
+Route::get('/events-feed', [EventController::class, 'feed']);

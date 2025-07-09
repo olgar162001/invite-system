@@ -5,12 +5,10 @@
     @include('../partials.sidebar')
     <div class="container">
         <h1 class="text-center">Templates</h1>
-        @if(session('success'))
-            <div class="alert alert-success">{{ session('success') }}</div>
-        @endif
+        
         @if(Auth::check() && Auth::user()->role === 'admin')
             <div class="mb-3">
-                <a href="{{ route('templates.create') }}" class="btn btn-primary">Create New Template</a>
+                <a href="{{ route('templates.create') }}" class="btn btn-dark">Create New Template</a>
             </div>
         @endif
         <div class="row">
@@ -24,7 +22,7 @@
                             <table class="table align-items-center mb-0">
                                 <thead>
                                     <tr>
-                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">#
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">S/N
                                         </th>
                                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                             Preview</th>

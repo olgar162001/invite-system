@@ -7,11 +7,6 @@
     <div class="container mt-5">
         <h2 class="text-center mb-4 text-dark">Assign SMS Units to Customer</h2>
 
-        {{-- Flash messages --}}
-        @if(session('success'))
-            <div class="alert alert-success">{{ session('success') }}</div>
-        @endif
-
         {{-- Form --}}
         <form method="POST" action="{{ route('sms.assign.store') }}" class="card p-4 shadow-sm bg-white">
             @csrf

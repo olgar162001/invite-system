@@ -34,6 +34,8 @@
     <!-- Toast UI CSS -->
     <link rel="stylesheet" href="{{ asset('vendor/toastui-calendar/toastui-calendar.min.css') }}">
 
+
+
     <!-- Toast UI JS -->
     <script src="{{ asset('vendor/toastui-calendar/toastui-calendar.min.js') }}"></script>
 
@@ -49,6 +51,13 @@
 
     {{-- Soft-ui-dashboard CSS --}}
     <link id="pagestyle" href="{{asset('/resources/assets/css/soft-ui-dashboard.css')}}" rel="stylesheet" />
+
+    <!-- Toastr CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+
+    <!-- FullCalendar CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet" />
+
     {{--
     <link id="pagestyle" href="{{asset('/resources/assets/css/soft-ui-dashboard.min.css')}}" rel="stylesheet" /> --}}
 

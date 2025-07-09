@@ -8,10 +8,6 @@
         <h1 class="text-center">Manage Customers</h1>
         <hr style="margin: auto; width: 8%;">
 
-        @if(session('success'))
-            <div class="alert alert-success">{{ session('success') }}</div>
-        @endif
-
         <div class="d-flex justify-content-between">
             <a href="{{ route('home') }}" class="btn btn-dark bg-gradient mb-3">
                 <i class="fa fa-arrow-left me-1"></i> Go Back

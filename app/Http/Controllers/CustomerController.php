@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\WelcomeMail;
+use App\Models\Customer;
 
 class CustomerController extends Controller
 {
@@ -38,9 +39,11 @@ class CustomerController extends Controller
         return redirect()->route('customers.index')->with('success', 'Customer added and welcome email sent.');
     }
 
-    public function destroy(Customer $customer)
+    public function destroy($id)
     {
+        $customer = Customer::find($id);
         $customer->delete();
+
         return redirect()->route('customers.index')->with('success', 'Customer deleted successfully.');
     }
 }

@@ -172,8 +172,8 @@ class GuestController extends Controller
         }
 
         $guests = Guest::where('event_id', $eventId)
-                        ->where('checklist_token', $token)
-                        ->get();
+            ->where('checklist_token', $token)
+            ->get();
 
         if ($guests->isEmpty()) {
             return redirect()->route('event.show', $eventId)->with('error', 'Guest not found.');
@@ -185,7 +185,7 @@ class GuestController extends Controller
         ]);
     }
 
-    
+
 
     public function sendInvitations(Request $request)
     {
@@ -207,17 +207,17 @@ class GuestController extends Controller
 
         foreach ($guestIds as $guestId) {
             $guest = Guest::find($guestId);
-            
 
             if ($guest) {
                 // Send email
-                dispatch(new SendInvitationJob($guest));
+                // dispatch(new SendInvitationJob($guest));
 
                 if ($guest->phone) {
+
                     // Replace {{placeholders}} in the template
                     $message = str_replace(
-                        ['{{recipient_name}}', '{{couple_names}}', '{{event_date}}', '{{venue_name}}', '{{venue_area}}', '{{event_time}}', '{{code_number}}', '{{code_type}}'],
-                        [$guest->name, $event->groom, $event->date, $event->venue, $event->location, $event->time, $guest->checklist_token, $guest->type],
+                        ['{recipient_name}', '{couple_names}', '{event_date}', '{venue_name}', '{venue_area}', '{event_time}', '{code_number}', '{card_type}'],
+                        [$guest->name, $event->groom, $event->date, $event->venue, $event->location_name, $event->time, $guest->checklist_token, $guest->type],
                         $template
                     );
 
@@ -226,6 +226,8 @@ class GuestController extends Controller
                 }
             }
         }
+
+        // return response()->json(['message' => $count], 200);
 
         return response()->json(['message' => 'Invitations sent successfully'], 200);
     }

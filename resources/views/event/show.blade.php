@@ -38,187 +38,219 @@
         <div id="guestSection" data-event-id="{{ $event->id }}">
 
 
-        <!-- Button for Sending Invitations -->
-        <button id="sendInvitesBtn" class="btn btn-success bg-gradient m-4">Send Invitations</button>
+            <!-- Button for Sending Invitations -->
+            <button id="sendInvitesBtn" class="btn btn-success bg-gradient m-4">Send Invitations</button>
 
-        <!-- Guests Table -->
-        <div class="table-responsive-md container-fluid">
-            <table class="table table-rounded table-secondary table-striped table-hover">
-                <thead>
-                    <tr>
-                        <th><input type="checkbox" id="selectAll"></th>
-                        <th>s/n</th>
-                        <th>Title</th>
-                        <th>Guest Name</th>
-                        <th>Email</th>
-                        <th>Phone</th>
-                        <th>Type</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
+            <!-- Guests Table -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="card mb-4 shadow">
+                        <div class="card-header pb-0">
+                            <h6>Guest List</h6>
+                        </div>
+                        <div class="card-body px-0 pt-0 pb-2">
+                            <div class="table-responsive p-0">
+                                <table class="table align-items-center mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                                <input type="checkbox" id="selectAll">
+                                            </th>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                                S/N</th>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                                Title</th>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                                Guest Name</th>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                                Email</th>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                                Phone</th>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                                Type</th>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                                Status</th>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                                Action</th>
+                                        </tr>
+                                    </thead>
 
-                <tbody class="table-group-divider">
-                    @if(count($guests) > 0)
-                        @foreach ($guests as $i => $guest)
-                            <tr>
-                                <td><input type="checkbox" name="guest_ids[]" value="{{ $guest->id }}" class="guestCheckbox"></td>
-                                <td>{{$i + 1}}</td>
-                                <td>{{$guest->title}}</td>
-                                <td>{{$guest->name}}</td>
-                                <td>{{$guest->email}}</td>
-                                <td>{{$guest->phone}}</td>
-                                <td>{{$guest->type}}</td>
-
-                                <td>
-                                    @if ($guest->status == 0)
-                                        <span class="badge rounded-pill text-bg-danger">Not Attending</span>
-                                    @elseif ($guest->status == 1)
-                                        <span class="badge rounded-pill text-bg-warning">Pending</span>
-                                    @elseif ($guest->status == 2)
-                                        <span class="badge rounded-pill text-bg-success">Attending</span>
-                                    @endif
-                                </td>
-
-                                <td class="d-flex align-items-center">
-                                    <a href="{{route('guest.edit', $guest->id)}}" class="text-success">
-                                        <span class="fas fa-edit"></span>
-                                    </a>
-                                    <a href="/card-template/{{$guest->id}}" class="text-warning-emphasis mx-1" title="View Card">
-                                        <span class="fas fa-eye"></span>
-                                    </a>
-
-                                    <!-- Delete Form -->
-                                    <form action="{{route('guest.delete', $guest->id)}}" method="POST" class="delete-form">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="button" class="fas fa-trash text-danger border-0 bg-transparent delete-btn"></button>
-                                    </form>
-
-                                    <!--<a href="#" onclick="sendWhatsAppMessage('{{ $guest->phone }}', '{{ $guest->invite_link }}')" class="btn btn-success bg-gradient">
-                                        Send invitation
-                                    </a>-->
-                                    @if ($guest->status == '2')
-                                        <a href="/guest/{{$guest->id}}/check" class="btn btn-dark mx-1 bg-gradient">Check</a>
-                                    @endif
-                                </td>
-                            </tr>
-                        @endforeach
-                    @else
-                        <tr>
-                            <td colspan="9" class="text-center">No Guests Invited</td>
-                        </tr>    
-                    @endif
-                </tbody>
-            </table>
-        </div>
-    </div>
-    <!-- Modal for Adding a Guest -->
-    <div class="modal fade" id="guestModal" tabindex="-1" aria-labelledby="guestModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="guestModalLabel">Add Guest</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    <tbody>
+                                        @forelse ($guests as $i => $guest)
+                                            <tr>
+                                                <td class="text-center">
+                                                    <input type="checkbox" name="guest_ids[]" value="{{ $guest->id }}"
+                                                        class="guestCheckbox">
+                                                </td>
+                                                <td class="text-sm">{{ $i + 1 }}</td>
+                                                <td class="text-sm">{{ $guest->title }}</td>
+                                                <td class="text-sm">{{ $guest->name }}</td>
+                                                <td class="text-sm">{{ $guest->email }}</td>
+                                                <td class="text-sm">{{ $guest->phone }}</td>
+                                                <td class="text-sm">{{ $guest->type }}</td>
+                                                <td>
+                                                    @if ($guest->status == 0)
+                                                        <span class="badge bg-gradient-danger">Not Attending</span>
+                                                    @elseif ($guest->status == 1)
+                                                        <span class="badge bg-gradient-warning">Pending</span>
+                                                    @elseif ($guest->status == 2)
+                                                        <span class="badge bg-gradient-success">Attending</span>
+                                                    @endif
+                                                </td>
+                                                <td class="text-sm d-flex align-items-center gap-2">
+                                                    <a href="{{ route('guest.edit', $guest->id) }}" class="text-success"
+                                                        title="Edit">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                    <a href="/card-template/{{ $guest->id }}" class="text-warning-emphasis"
+                                                        title="View Card">
+                                                        <i class="fas fa-eye"></i>
+                                                    </a>
+                                                    <form action="{{ route('guest.delete', $guest->id) }}" method="POST"
+                                                        class="delete-form d-inline">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="button"
+                                                            class="bg-transparent border-0 text-danger delete-btn"
+                                                            title="Delete">
+                                                            <i class="fas fa-trash"></i>
+                                                        </button>
+                                                    </form>
+                                                    @if ($guest->status == '2')
+                                                        <a href="/guest/{{ $guest->id }}/check"
+                                                            class="btn btn-dark btn-sm bg-gradient" title="Check In">
+                                                            Check
+                                                        </a>
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="9" class="text-center text-sm text-secondary">No Guests Invited
+                                                </td>
+                                            </tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="modal-body bg-secondary-subtle">
-                    <form action="/{{$event->id}}/create" method="post" enctype="multipart/form-data">
-                        @csrf
-                        <div class="form-group my-2">
-                            <label for="Name" class="form-label">Name</label>
-                            <input type="text" name="name" class="form-control">
-                        </div>
-                        <div class="form-group my-2">
-                            <label for="Title" class="form-label">Title</label>
-                            <input type="text" name="title" class="form-control">
-                        </div>
-                        <div class="form-group my-2">
-                            <label for="Email" class="form-label">Email</label>
-                            <input type="text" name="email" class="form-control">
-                        </div>
-                        <div class="form-group my-2">
-                            <label for="Phone" class="form-label">Phone</label>
-                            <input type="tel" name="phone" class="form-control">
-                        </div>
-                        <div class="form-group my-2">
-                            <label for="Type" class="form-label">Type</label>
-                            <select name="type" class="form-select">
-                                <option value="Single">Single</option>
-                                <option value="Double">Double</option>
-                            </select>
-                        </div>
+            </div>
 
-                        <hr>
+        </div>
+        <!-- Modal for Adding a Guest -->
+        <div class="modal fade" id="guestModal" tabindex="-1" aria-labelledby="guestModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="guestModalLabel">Add Guest</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body bg-secondary-subtle">
+                        <form action="/{{$event->id}}/create" method="post" enctype="multipart/form-data">
+                            @csrf
+                            <div class="form-group my-2">
+                                <label for="Name" class="form-label">Name</label>
+                                <input type="text" name="name" class="form-control">
+                            </div>
+                            <div class="form-group my-2">
+                                <label for="Title" class="form-label">Title</label>
+                                <input type="text" name="title" class="form-control">
+                            </div>
+                            <div class="form-group my-2">
+                                <label for="Email" class="form-label">Email</label>
+                                <input type="text" name="email" class="form-control">
+                            </div>
+                            <div class="form-group my-2">
+                                <label for="Phone" class="form-label">Phone</label>
+                                <input type="tel" name="phone" class="form-control">
+                            </div>
+                            <div class="form-group my-2">
+                                <label for="Type" class="form-label">Type</label>
+                                <select name="type" class="form-select">
+                                    <option value="Single">Single</option>
+                                    <option value="Double">Double</option>
+                                </select>
+                            </div>
 
-                        <!-- Bulk Import Section -->
-                        <div class="form-group my-2">
-                            <label for="csv_file" class="form-label">Import Guests (CSV/Excel)</label>
-                            <input type="file" name="csv_file" class="form-control" accept=".csv,.xlsx">
-                        </div>
+                            <hr>
 
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-dark bg-gradient" data-bs-dismiss="modal">Close</button>
-                            <input type="submit" value="Add Guest" class="btn btn-success bg-gradient">
-                        </div>
-                    </form>
+                            <!-- Bulk Import Section -->
+                            <div class="form-group my-2">
+                                <label for="csv_file" class="form-label">Import Guests (CSV/Excel)</label>
+                                <input type="file" name="csv_file" class="form-control" accept=".csv,.xlsx">
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-dark bg-gradient"
+                                    data-bs-dismiss="modal">Close</button>
+                                <input type="submit" value="Add Guest" class="btn btn-success bg-gradient">
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- JavaScript for Select All and Delete Confirmation -->
-    <script>
-        // Handle "Select All" functionality
-        document.getElementById("selectAll").addEventListener("change", function() {
-            let checkboxes = document.querySelectorAll(".guestCheckbox");
-            checkboxes.forEach(checkbox => checkbox.checked = this.checked);
-        });
+        <!-- JavaScript for Select All and Delete Confirmation -->
+        <script>
+            // Handle "Select All" functionality
+            document.getElementById("selectAll").addEventListener("change", function () {
+                let checkboxes = document.querySelectorAll(".guestCheckbox");
+                checkboxes.forEach(checkbox => checkbox.checked = this.checked);
+            });
 
-        // Handle Delete Confirmation
-        document.addEventListener("DOMContentLoaded", function () {
-            document.querySelectorAll(".delete-btn").forEach(button => {
-                button.addEventListener("click", function () {
-                    if (confirm("Are you sure you want to delete this guest?")) {
-                        this.closest("form").submit();
-                    }
+            // Handle Delete Confirmation
+            document.addEventListener("DOMContentLoaded", function () {
+                document.querySelectorAll(".delete-btn").forEach(button => {
+                    button.addEventListener("click", function () {
+                        if (confirm("Are you sure you want to delete this guest?")) {
+                            this.closest("form").submit();
+                        }
+                    });
                 });
             });
-        });
 
-        // Handle Sending Invitations
-        document.getElementById("sendInvitesBtn").onclick = null;
-        document.getElementById("sendInvitesBtn").addEventListener("click", function () {
-            let selectedGuests = [];
-            document.querySelectorAll(".guestCheckbox:checked").forEach(checkbox => {
-                selectedGuests.push(checkbox.value);
-            });
+            // Handle Sending Invitations
+            document.getElementById("sendInvitesBtn").onclick = null;
+            document.getElementById("sendInvitesBtn").addEventListener("click", function () {
+                let selectedGuests = [];
 
-            if (selectedGuests.length === 0) {
-                alert("Please select at least one guest.");
-                return;
-            }
+                document.querySelectorAll(".guestCheckbox:checked").forEach(checkbox => {
+                    selectedGuests.push(checkbox.value);
+                });
 
-            // Grab event ID from data attribute
-            const eventId = document.getElementById("guestSection").dataset.eventId;
+                if (selectedGuests.length === 0) {
+                    alert("Please select at least one guest.");
+                    return;
+                }
 
-            fetch("{{ route('send.invitations') }}", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
-                },
-                body: JSON.stringify({
-                    guest_ids: selectedGuests,
-                    event_id: eventId
+                // Grab event ID from data attribute
+                const eventId = document.getElementById("guestSection").dataset.eventId;
+                
+                const sendBtn = document.getElementById("sendInvitesBtn");
+                sendBtn.disabled = true;
+
+                fetch("{{ route('send.invitations') }}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                    },
+                    body: JSON.stringify({
+                        guest_ids: selectedGuests,
+                        event_id: eventId
+                    })
                 })
-            })
-            .then(response => response.json())
-            .then(data => {
-                alert("Invitations sent successfully!");
-            })
-            .catch(error => {
-                console.error("Error:", error);
+                    .then(response => response.json())
+                    .then(data => {
+                        alert('Invitation Sent Successfully: ' + data.message);
+                        // console.log(data);
+                    })
+                    .catch(error => {
+                        console.error("Error:", error);
+                    });
             });
-        });
-    </script>
+        </script>
 @endsection
