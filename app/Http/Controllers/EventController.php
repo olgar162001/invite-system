@@ -114,6 +114,8 @@ class EventController extends Controller
             'audio' => 'nullable|mimes:mp3,wav,ogg|max:5120',
         ]);
 
+        
+
         $event->fill($request->only([
             'event_name',
             'event_host',

@@ -46,8 +46,10 @@ class UserController extends Controller
         return view('customers.edit', compact('customers'));
     }
 
-    public function update(Request $request, string $d)
+    public function update(Request $request, string $id)
     {
+        $user=User::findOrFail($id);
+
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $user->id,

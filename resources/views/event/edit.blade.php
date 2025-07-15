@@ -9,6 +9,9 @@
                 @csrf
                 @method('PUT')
 
+                <input type="hidden" name="customer_id" value="{{ $event->user_id }}">
+
+
                 <div class="form-group my-4">
                     <label for="event_name" class="form-label">Event Name</label>
                     <input type="text" name="event_name" value="{{ $event->event_name }}" class="form-control">
