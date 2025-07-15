@@ -123,6 +123,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
 
     Route::get('/sms/settings', [SmsController::class, 'settings'])->name('sms.settings');
     Route::post('/sms/settings', [SmsController::class, 'updateSettings'])->name('sms.settings.update');
+    Route::get('/email-settings', [EmailSettingController::class, 'index'])->name('email.settings');
+    Route::post('/email-settings', [EmailSettingController::class, 'update'])->name('email.settings.update');
 
     Route::get('/sms/balance', [SmsController::class, 'balance'])->name('sms.balance');
 
