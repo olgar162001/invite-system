@@ -18,11 +18,6 @@
     <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
     <!-- CSS Files -->
 
-    <!-- Fonts -->
-    {{--
-    <link rel="dns-prefetch" href="//fonts.bunny.net"> --}}
-    {{--
-    <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet"> --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -34,11 +29,8 @@
     <!-- Toast UI CSS -->
     <link rel="stylesheet" href="{{ asset('vendor/toastui-calendar/toastui-calendar.min.css') }}">
 
-
-
     <!-- Toast UI JS -->
     <script src="{{ asset('vendor/toastui-calendar/toastui-calendar.min.js') }}"></script>
-
 
     {{-- Favicon --}}
     <link id="favicon" rel="shortcut icon" href="{{asset('favicon-dark.png')}}" type="image/x-icon">

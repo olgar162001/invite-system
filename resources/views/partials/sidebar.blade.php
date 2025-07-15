@@ -132,6 +132,19 @@
                     <span class="nav-link-text ms-1">Calendar</span>
                 </a>
             </li>
+
+            <li class="nav-item">
+                <a class="nav-link @if (Request::is('to-do'))
+                    active
+                @endif " href="/to-do">
+                    <div
+                        class="icon icon-shape icon-sm shadow border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="fas fa-calendar text-black {{Request::is('to-do') ? 'text-white' : 'text-black' }}" href="/to-do"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">To-do List</span>
+                </a>
+            </li>
+
             <li class="nav-item">
                 <a class="nav-link @if (Request::is('profile'))
                     active
@@ -172,7 +185,7 @@
                 </div>
                 <div class="docs-info">
                     <h6 class="text-white up mb-0">Need help?</h6>
-                    <p class="text-xs font-weight-bold">Please check our docs</p>
+                    <p class="text-xs font-weight-bold">Please contact us</p>
                     <a href="https://www.creative-tim.com/learning-lab/bootstrap/license/soft-ui-dashboard"
                         target="_blank" class="btn btn-white btn-sm w-100 mb-0">Documentation</a>
                 </div>

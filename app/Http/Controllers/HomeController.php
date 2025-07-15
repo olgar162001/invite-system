@@ -17,7 +17,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth'); // 🔒 Protects all functions in this controller
+        $this->middleware('auth');
     }
 
     /**
@@ -28,8 +28,8 @@ class HomeController extends Controller
     public function index()
     {
         $id = auth()->id();
-        $role = User::where('id', $id)->value('role'); // Get role as a single value
-        $today = Carbon::today(); // Current date
+        $role = User::where('id', $id)->value('role');
+        $today = Carbon::today();
 
         if ($role === 'admin') {
             // Admin sees all upcoming events
@@ -51,20 +51,28 @@ class HomeController extends Controller
 
         $response = SmsHelper::fetchSmsBalance();
 
+        $balance = $response['data']['sms_balance'] ?? 'N/L';
+
         if (!$response['success']) {
-            return back()->withErrors(['msg' => $response['message']]);
+            return view('home')->with([
+                'events' => $events,
+                'guest' => $guests,
+                'attending' => $attending_guest,
+                'pending' => $pending_guest,
+                'not' => $not_guest,
+                'balance' => $balance,
+                'error' => 'Failed to fetch SMS Balance! Check your internet connection.'
+            ]);
+        } else {
+            return view('home')->with([
+                'events' => $events,
+                'guest' => $guests,
+                'attending' => $attending_guest,
+                'pending' => $pending_guest,
+                'not' => $not_guest,
+                'balance' => $balance
+            ]);
         }
-
-        $balance = $response['data']['sms_balance'] ?? 0;
-
-        return view('home')->with([
-            'events' => $events,
-            'guest' => $guests,
-            'attending' => $attending_guest,
-            'pending' => $pending_guest,
-            'not' => $not_guest,
-            'balance' => $balance
-        ]);
     }
 
 
