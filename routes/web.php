@@ -13,6 +13,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Admin\TemplateController;
 use App\Http\Controllers\SmsController;
+use App\Http\Controllers\EmailSettingController;
 
 /*
 |--------------------------------------------------------------------------
