@@ -65,7 +65,7 @@
           <div class="ms-md-auto pe-md-3 d-flex align-items-center">
             <div class="input-group">
               <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
-              <input type="text" class="form-control" placeholder="Search here...">
+              <input type="text" id="globalSearch" class="form-control" placeholder="Search here...">
             </div>
           </div>
           <ul class="navbar-nav d-flex gap-3 align-items-center justify-content-end">
@@ -173,3 +173,21 @@
       </div>
     </nav>
     <!-- End Navbar -->
+
+    <script>
+    document.getElementById('globalSearch').addEventListener('input', function() {
+        const query = this.value.toLowerCase();
+        const links = document.querySelectorAll('#sidenav-main a[data-search-label]');
+        
+        links.forEach(link => {
+            const label = link.getAttribute('data-search-label').toLowerCase();
+            const parent = link.closest('li');
+
+            if (label.includes(query)) {
+                parent.style.display = '';
+            } else {
+                parent.style.display = 'none';
+            }
+        });
+    });
+    </script>
