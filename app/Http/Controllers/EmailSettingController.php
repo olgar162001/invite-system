@@ -9,26 +9,31 @@ class EmailSettingController extends Controller
 {
     public function index()
     {
-        $setting = EmailSetting::first();
+        $setting = EmailSetting::first() ?? new EmailSetting();;
         return view('email_settings.index', compact('setting'));
     }
 
     public function update(Request $request)
     {
-        $request->validate([
-            'mailer' => 'required',
-            'host' => 'required',
-            'port' => 'required|numeric',
-            'username' => 'required',
-            'password' => 'required',
-            'encryption' => 'nullable',
-            'from_address' => 'required|email',
-            'from_name' => 'required',
+        $data = $request->validate([
+            'mailer' => 'nullable|string',
+            'host' => 'nullable|string',
+            'port' => 'nullable|numeric',
+            'username' => 'nullable|string',
+            'password' => 'nullable|string',
+            'encryption' => 'nullable|string',
+            'from_address' => 'nullable|email',
+            'from_name' => 'nullable|string',
         ]);
 
         $setting = EmailSetting::first();
-        $setting->update($request->all());
 
-        return redirect()->back()->with('success', 'Email settings updated.');
+        if ($setting) {
+            $setting->update($data);
+        } else {
+            EmailSetting::create($data); // 👈 create new record if none exists
+        }
+
+        return redirect()->back()->with('success', 'Email settings updated successfully.');
     }
 }
