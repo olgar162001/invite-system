@@ -8,6 +8,7 @@ use App\Models\Guest;
 use App\Models\Template;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Log;
 
 class EventController extends Controller
 {
@@ -23,6 +24,9 @@ class EventController extends Controller
 
         $user = auth()->user();
         $events = $user->isAdmin() ? Event::all() : Event::where('user_id', $user->id)->get();
+
+        // Log::info('Event Fetched successfully', [$events]);
+
 
         return view('event.index', compact('events'));
     }
@@ -117,7 +121,7 @@ class EventController extends Controller
             'audio' => 'nullable|mimes:mp3,wav,ogg|max:5120',
         ]);
 
-        
+
 
         $event->fill($request->only([
             'event_name',
