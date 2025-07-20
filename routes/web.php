@@ -14,6 +14,8 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Admin\TemplateController;
 use App\Http\Controllers\SmsController;
+use App\Mail\InvitationMail;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -142,5 +144,14 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
 Route::post('/send-sms', [SmsController::class, 'SendInvaitation'])
     ->middleware(['auth', 'check.sms.units']);
 
-    // Show events on Calendar
+// Show events on Calendar
 Route::get('/events-feed', [EventController::class, 'feed']);
+
+
+
+// Email Preview
+Route::get('/mail-preview', function () {
+    $guest = App\Models\Guest::find(2);
+
+    return new InvitationMail($guest);
+});

@@ -154,7 +154,7 @@ class SmsController extends Controller
     
         // Proceed to send SMS
         foreach ($request->recipients as $recipient) {
-            // callSmsApi($recipient, $request->message);
+            // SmsApi($recipient, $request->message);
         }
     
         $allocation->increment('units_used', $unitsNeeded);

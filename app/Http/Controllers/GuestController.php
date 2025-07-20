@@ -210,7 +210,7 @@ class GuestController extends Controller
 
             if ($guest) {
                 // Send email
-                // dispatch(new SendInvitationJob($guest));
+                dispatch(new SendInvitationJob($guest));
 
                 if ($guest->phone) {
 
