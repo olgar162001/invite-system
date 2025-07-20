@@ -31,7 +31,11 @@ class LoginController extends Controller
             'password' => 'required'
         ]);
 
-        if (Auth::attempt($credentials)) {
+        $remember = $request->has('remember');
+
+        if (Auth::attempt($credentials, $remember)) {
+            $request->session()->regenerate();
+
             $user = Auth::user();
 
             if ($user->status == 0) {
@@ -46,7 +50,7 @@ class LoginController extends Controller
             return redirect()->route('home')->with('success', 'Login Successful'); // Redirect customer
         }
 
-        return back()->withErrors(['email' => 'Invalid login credentials.']);
+        return back()->withErrors(['email' => 'Invalid Login credentials.']);
     }
 
 
