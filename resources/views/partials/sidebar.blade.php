@@ -150,16 +150,14 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link @if (Request::is('to-do'))
-                    active
-                @endif " href="/to-do" data-search-label="To-do List">
-                    <div
-                        class="icon icon-shape icon-sm shadow border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="fas fa-calendar text-black {{Request::is('to-do') ? 'text-white' : 'text-black' }}" href="/to-do"></i>
+                <a class="nav-link @if (Request::is('to_do')) active @endif" href="{{ route('to_do.index') }}" data-search-label="To-do List">
+                    <div class="icon icon-shape icon-sm shadow border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="fas fa-calendar text-black {{ Request::is('to_do') ? 'text-white' : 'text-black' }}"></i>
                     </div>
                     <span class="nav-link-text ms-1">To-do List</span>
                 </a>
             </li>
+
 
             <li class="nav-item">
                 <a class="nav-link @if (Request::is('profile'))

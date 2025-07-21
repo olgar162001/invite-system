@@ -15,6 +15,7 @@ use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Admin\TemplateController;
 use App\Http\Controllers\SmsController;
 use App\Mail\InvitationMail;
+use App\Http\Controllers\ToDoController;
 
 
 /*
@@ -137,6 +138,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
         return response()->json($events);
     });
     Route::post('/sms/assign', [SmsController::class, 'assignToCustomer'])->name('sms.assign.store');
+
+    Route::resource('to_do', ToDoController::class);
+
 
 });
 
