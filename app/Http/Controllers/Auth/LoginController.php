@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Helpers\AuditHelper;
 use App\Http\Controllers\Controller;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Facades\Auth;
@@ -44,9 +45,11 @@ class LoginController extends Controller
             }
 
             if ($user->isAdmin()) {
+                AuditHelper::log('Login', 'Admin logged into the system');
                 return redirect()->route('home')->with('success', 'Login Successful'); // Redirect admin
             }
 
+            AuditHelper::log('Login', 'Customer logged into the system');
             return redirect()->route('home')->with('success', 'Login Successful'); // Redirect customer
         }
 
@@ -69,6 +72,7 @@ class LoginController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+        AuditHelper::log('Logout', 'User logged out the system');
 
         return redirect('login')->with('success', 'Logged out successfully.');
     }
@@ -110,6 +114,7 @@ class LoginController extends Controller
 
         // Log in as the customer
         Auth::login($customer);
+        AuditHelper::log('Login as customer', 'Impersonated a customer');
 
         return redirect()->route('home')->with('success', 'You are now logged in as a customer.');
     }
@@ -127,7 +132,7 @@ class LoginController extends Controller
 
             session()->forget('impersonate_admin_id'); // Clean up
         }
-
+        AuditHelper::log('Logged out as customer', 'User stopped Impersonating as customer');
         return redirect()->route('home')->with('success', 'You are now back as admin.');
     }
 

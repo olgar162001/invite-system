@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\AuditHelper;
 use Illuminate\Http\Request;
 use App\Models\EmailSetting;
 
@@ -31,9 +32,11 @@ class EmailSettingController extends Controller
         if ($setting) {
             $setting->update($data);
         } else {
-            EmailSetting::create($data); // 👈 create new record if none exists
+            EmailSetting::create($data); // create new record
         }
 
+        AuditHelper::log('Update Email Settings', 'Email settings were updated');
+        
         return redirect()->back()->with('success', 'Email settings updated successfully.');
     }
 }

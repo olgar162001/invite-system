@@ -4,7 +4,7 @@
 <div class="container">
     <h2>Edit Task</h2>
 
-    <form action="{{ route('to_do.update', $to_do) }}" method="POST">
+    <form action="{{ route('to-do.update', $to_do) }}" method="POST">
         @csrf
         @method('PUT')
 
@@ -38,7 +38,7 @@
         </div>
 
         
-        <button type="submit" class="btn btn-success">Update</button>
+        <button type="submit" class="btn btn-dark">Update</button>
     </form>
 </div>
 @endsection

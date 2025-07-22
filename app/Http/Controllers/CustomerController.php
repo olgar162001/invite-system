@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\AuditHelper;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -35,6 +36,8 @@ class CustomerController extends Controller
 
         Mail::to($customer->email)->send(new WelcomeMail($customer, $password));
 
+        AuditHelper::log('Create Customer', 'Customer was created');
+        
         return redirect()->route('customers.index')->with('success', 'Customer added and welcome email sent.');
     }
 
@@ -43,6 +46,7 @@ class CustomerController extends Controller
         $customer = Customer::find($id);
         $customer->delete();
 
+        AuditHelper::log('Delete Customer', 'Customer was deleted');
         return redirect()->route('customers.index')->with('success', 'Customer deleted successfully.');
     }
 }

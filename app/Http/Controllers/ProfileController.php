@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\AuditHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -31,6 +32,8 @@ class ProfileController extends Controller
             'phone_number' => $request->phone_number,
         ]);
 
+        AuditHelper::log('Update Profile', 'User updated profile details');
+        
         return redirect()->back()->with('success', 'Profile updated successfully.');
     }
 
@@ -54,6 +57,7 @@ class ProfileController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
+        AuditHelper::log('Update Password', 'User updated password');
         return redirect()->back()->with('success', 'Password updated successfully.');
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\AuditHelper;
 use App\Models\Event;
 use App\Models\Guest;
 use App\Models\SmsSetting;
@@ -66,6 +67,7 @@ class GuestController extends Controller
         $guest->event_id = $id;
         $guest->save();
 
+        AuditHelper::log('Add Guest', 'Guests was added');
         return redirect('/event/' . $id)->with('success', 'Guest Added');
     }
 
@@ -80,6 +82,7 @@ class GuestController extends Controller
 
         try {
             Excel::import(new GuestsImport($eventId), $request->file('csv_file'));
+            AuditHelper::log('Import Guest', 'Guests were imported');
             return redirect('/event/' . $eventId)->with('success', 'Guests imported successfully.');
         } catch (\Exception $e) {
             return redirect('/event/' . $eventId)->with('error', 'Error importing guests: ' . $e->getMessage());
@@ -133,6 +136,7 @@ class GuestController extends Controller
         $guest->event_id = $id;
         $guest->update();
 
+        AuditHelper::log('Update Guest', 'Guest details were updated');
         return redirect('event.show')->with('success', 'Guest Edited');
     }
 
@@ -144,6 +148,7 @@ class GuestController extends Controller
         $guest = Guest::find($id);
         $guest->delete();
 
+        AuditHelper::log('Delete Guest', 'Guest was deleted');
         return redirect()->back()->with('success', 'Guest Deleted');
     }
 
@@ -156,6 +161,7 @@ class GuestController extends Controller
         $guest->check_status = '1';
         $guest->update();
 
+        AuditHelper::log('Guest Checklist', 'Guest was checklisted');
         return redirect()->back()->with('success', 'Guest Checked Successfully');
     }
 
@@ -229,6 +235,8 @@ class GuestController extends Controller
 
         // return response()->json(['message' => $count], 200);
 
+        AuditHelper::log('Send SMS and Email Invitations', 'SMS and Email invitations were sent to event guests');
+        
         return response()->json(['message' => 'Invitations sent successfully'], 200);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\AuditHelper;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -36,6 +37,8 @@ class UserController extends Controller
 
         Mail::to($user->email)->send(new WelcomeMail($user, $password));
 
+        AuditHelper::log('Create User', 'User was created');
+        
         return redirect()->route('customers.index')->with('success', 'Customer added successfully.');
     }
 
@@ -62,6 +65,8 @@ class UserController extends Controller
             'phone' => $request->phone,
         ]);
 
+        AuditHelper::log('Update User', 'User details were updated');
+
         return redirect()->route('customers.index')->with('success', 'Customer updated successfully.');
     }
 
@@ -69,6 +74,8 @@ class UserController extends Controller
     {
         $user= User::findOrFail($id);
         $user->delete();
+
+        AuditHelper::log('Delete User', 'User was deleted');
         return redirect()->route('customers.index')->with('success', 'Customer deleted successfully.');
     }
 }

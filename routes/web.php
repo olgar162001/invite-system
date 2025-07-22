@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuditController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
@@ -63,9 +64,11 @@ Route::middleware(['auth', 'isAdmin'])->group(function () {
     Route::resource('/customers', UserController::class);
     Route::get('{guest}/check', [GuestController::class, 'check']);
 
+    // Calendar
     Route::get('/calendar', function () {
         return view('calendar');
     })->name('calendar');
+
 });
 
 //Route::middleware(['guest'])->group(function () {
@@ -108,9 +111,6 @@ Route::middleware(['auth'])->group(function () {
 });
 
 
-
-
-
 // Public/customer view-only route
 Route::get('/card-template', [TemplateController::class, 'index'])->name('templates.index');
 
@@ -122,26 +122,29 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::put('/templates/{template}', [TemplateController::class, 'update'])->name('templates.update');
     Route::delete('/templates/{template}', [TemplateController::class, 'destroy'])->name('templates.destroy');
 
-
-
-
+    // SMS
     Route::get('/sms/settings', [SmsController::class, 'settings'])->name('sms.settings');
     Route::post('/sms/settings', [SmsController::class, 'updateSettings'])->name('sms.settings.update');
+    Route::get('/sms/balance', [SmsController::class, 'balance'])->name('sms.balance');
+    Route::get('/sms/assign', [SmsController::class, 'assign'])->name('sms.assign');
+    Route::post('/sms/assign', [SmsController::class, 'assignToCustomer'])->name('sms.assign.store');
+
+    // Email Settings
     Route::get('/email-settings', [EmailSettingController::class, 'index'])->name('email.settings');
     Route::post('/email-settings', [EmailSettingController::class, 'update'])->name('email.settings.update');
 
-    Route::get('/sms/balance', [SmsController::class, 'balance'])->name('sms.balance');
-
-    Route::get('/sms/assign', [SmsController::class, 'assign'])->name('sms.assign');
     Route::get('/customer/{id}/events', function ($id) {
         $events = Event::where('user_id', $id)->get(['id', 'title']);
         return response()->json($events);
     });
-    Route::post('/sms/assign', [SmsController::class, 'assignToCustomer'])->name('sms.assign.store');
 
-    Route::resource('to_do', ToDoController::class);
+    // Tasks and To-do
+    Route::resource('tasks', ToDoController::class);
+    Route::resource('to-do', ToDoController::class);
 
-
+    // Audit Logs
+    Route::get('/audits', [AuditController::class, 'index'])->name('audits');
+    Route::delete('/audits/clear', [AuditController::class, 'clear'])->name('audits.clear');
 });
 
 

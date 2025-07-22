@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\AuditHelper;
 use App\Models\Event;
 use App\Models\User;
 use App\Models\Guest;
@@ -82,6 +83,7 @@ class EventController extends Controller
 
         $event->save();
 
+        AuditHelper::log('Create Event', 'Event was created');
         return redirect('/event')->with('success', 'Event Created');
     }
 
@@ -153,6 +155,7 @@ class EventController extends Controller
 
         $event->save();
 
+        AuditHelper::log('Update Event', 'Event details were updated');
         return redirect('/event')->with('success', 'Event Updated');
     }
 
@@ -166,6 +169,8 @@ class EventController extends Controller
         }
 
         $event->delete();
+
+        AuditHelper::log('Delete Event', 'Event was deleted');
 
         return redirect('/event')->with('success', 'Event Deleted');
     }

@@ -105,36 +105,62 @@
                     <span class="nav-link-text ms-1">SMS Balance</span>
                 </a>
             </li>
+            
+
+            <li class="nav-item mt-3">
+                <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Settings</h6>
+            </li>
+
             <li class="nav-item">
                 <a class="nav-link @if (Request::is('admin/sms/settings'))
                     active
                 @endif " href="{{route('sms.settings')}}" data-search-label="SMS Setting">
                     <div
                         class="icon icon-shape icon-sm shadow border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="fas fa-cog text-black {{Request::is('admin/sms/settings') ? 'text-white' : 'text-black' }}" href="/admin/sms/settings"></i>
+                        <i class="fas fa-comment-sms text-black {{Request::is('admin/sms/settings') ? 'text-white' : 'text-black' }}" href="/admin/sms/settings"></i>
                     </div>
                     <span class="nav-link-text ms-1">SMS Settings</span>
                 </a>
             </li>
 
-            <li class="nav-item mt-3">
-                <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Email</h6>
+            <li class="nav-item">
+                <a class="nav-link @if (Request::is('admin/whatsapp/settings'))
+                    active
+                @endif " href="{{route('sms.settings')}}" data-search-label="SMS Setting">
+                    <div
+                        class="icon icon-shape icon-sm shadow border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="fab fa-whatsapp text-black {{Request::is('admin/whatsapp/settings') ? 'text-white' : 'text-black' }}" href="/admin/sms/settings"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">WhatsApp Settings</span>
+                </a>
             </li>
 
             <li class="nav-item">
-                <a class="nav-link @if (Request::is('email-settings'))
+                <a class="nav-link @if (Request::is('admin/email-settings'))
                     active
                 @endif " href="{{route('email.settings')}}" data-search-label="Email">
                     <div
                         class="icon icon-shape icon-sm shadow border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="fas fa-balance-scale text-black {{Request::is('/email-settings') ? 'text-white' : 'text-black' }}" href="{{route('email.settings')}}"></i>
+                        <i class="fas fa-envelope text-black {{Request::is('admin/email-settings') ? 'text-white' : 'text-black' }}" href="{{route('email.settings')}}"></i>
                     </div>
-                    <span class="nav-link-text ms-1">Setting</span>
+                    <span class="nav-link-text ms-1">Email Settings</span>
                 </a>
             </li>
 
             <li class="nav-item mt-3">
                 <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Others</h6>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link @if (Request::is('admin/audits'))
+                    active
+                @endif " href="/admin/audits" data-search-label="audits">
+                    <div
+                        class="icon icon-shape icon-sm shadow border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="fas fa-eye text-black {{Request::is('admin/audits') ? 'text-white' : 'text-black' }}" href="/admin/audits"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Audits</span>
+                </a>
             </li>
 
             <li class="nav-item">
@@ -150,11 +176,20 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link @if (Request::is('to_do')) active @endif" href="{{ route('to_do.index') }}" data-search-label="To-do List">
+                <a class="nav-link @if (Request::is('to-do')) active @endif" href="{{ route('to-do.index') }}" data-search-label="To-do List">
                     <div class="icon icon-shape icon-sm shadow border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="fas fa-calendar text-black {{ Request::is('to_do') ? 'text-white' : 'text-black' }}"></i>
+                        <i class="fas fa-check-square text-black {{ Request::is('to-do') ? 'text-white' : 'text-black' }}"></i>
                     </div>
                     <span class="nav-link-text ms-1">To-do List</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link @if (Request::is('tasks')) active @endif" href="{{ route('tasks.index') }}" data-search-label="Tasks">
+                    <div class="icon icon-shape icon-sm shadow border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="fas fa-tasks text-black {{ Request::is('tasks') ? 'text-white' : 'text-black' }}"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Tasks</span>
                 </a>
             </li>
 
