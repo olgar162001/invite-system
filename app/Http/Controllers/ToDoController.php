@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Task;
 use Illuminate\Http\Request;
 use App\Models\ToDo;
 
@@ -12,6 +13,13 @@ class ToDoController extends Controller
         $tasks = ToDo::all();
         return view('to_do_list.index', compact('tasks'));
     }
+
+    public function todo()
+    {
+        $todos = Task::all();
+        return view('to_do_list.todo', compact('todos'));
+    }
+
 
     public function create()
     {

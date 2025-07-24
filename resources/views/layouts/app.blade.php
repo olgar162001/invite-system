@@ -92,6 +92,10 @@
 <!-- FullCalendar JS -->
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
 
+{{-- Livewire script --}}
+@livewireScripts
+<script defer src="https://unpkg.com/alpinejs"></script>
+
 
 <script>
     @if(Session::has('success'))
@@ -109,6 +113,21 @@
     @if(Session::has('warning'))
         toastr.warning("{{ Session::get('warning') }}");
     @endif
+</script>
+
+<!-- Livewire + Toastr integration -->
+<script>
+    window.addEventListener('todo:added', () => {
+        toastr.success('To-do item added successfully!');
+    });
+
+    window.addEventListener('todo:deleted', () => {
+        toastr.info('To-do item deleted!');
+    });
+
+    window.addEventListener('todo:toggled', () => {
+        toastr.success('To-do item status updated!');
+    });
 </script>
 
 </body>

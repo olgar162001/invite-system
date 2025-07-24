@@ -176,7 +176,7 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link @if (Request::is('to-do')) active @endif" href="{{ route('to-do.index') }}" data-search-label="To-do List">
+                <a class="nav-link @if (Request::is('to-do')) active @endif" href="{{ route('todo') }}" data-search-label="To-do List">
                     <div class="icon icon-shape icon-sm shadow border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="fas fa-check-square text-black {{ Request::is('to-do') ? 'text-white' : 'text-black' }}"></i>
                     </div>

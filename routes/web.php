@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuditController;
+use App\Livewire\TodoList;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
@@ -140,7 +141,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
 
     // Tasks and To-do
     Route::resource('tasks', ToDoController::class);
-    Route::resource('to-do', ToDoController::class);
+    // Route::resource('to-do', ToDoController::class);
 
     // Audit Logs
     Route::get('/audits', [AuditController::class, 'index'])->name('audits');
@@ -162,3 +163,6 @@ Route::get('/mail-preview', function () {
 
     return new InvitationMail($guest);
 });
+
+// Todo list
+Route::get('/to-do', [ToDoController::class, 'todo'])->name('todo');
