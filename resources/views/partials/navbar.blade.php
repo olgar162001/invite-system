@@ -63,10 +63,17 @@
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
           <div class="ms-md-auto pe-md-3 d-flex align-items-center">
-            <div class="input-group">
-              <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
-              <input type="text" id="globalSearch" class="form-control" placeholder="Search here...">
-            </div>
+          <div class="position-relative w-100" style="max-width: 300px;">
+              <div class="input-group">
+                  <span class="input-group-text text-body">
+                      <i class="fas fa-search" aria-hidden="true"></i>
+                  </span>
+                  <input type="text" id="globalSearch" class="form-control" placeholder="Search here...">
+              </div>
+              <ul id="searchDropdown" class="dropdown-menu w-100 shadow" style="top: 100%; left: 0; display: none; z-index: 1050; position: absolute; max-height: 300px; overflow-y: auto;"></ul>
+          </div>
+
+
           </div>
           <ul class="navbar-nav d-flex gap-3 align-items-center justify-content-end">
             {{-- <li class="nav-item d-flex align-items-center">
@@ -175,19 +182,45 @@
     <!-- End Navbar -->
 
     <script>
-    document.getElementById('globalSearch').addEventListener('input', function() {
-        const query = this.value.toLowerCase();
-        const links = document.querySelectorAll('#sidenav-main a[data-search-label]');
-        
-        links.forEach(link => {
-            const label = link.getAttribute('data-search-label').toLowerCase();
-            const parent = link.closest('li');
+document.addEventListener('DOMContentLoaded', function () {
+    const searchInput = document.getElementById('globalSearch');
+    const dropdown = document.getElementById('searchDropdown');
 
-            if (label.includes(query)) {
-                parent.style.display = '';
-            } else {
-                parent.style.display = 'none';
-            }
-        });
+    const links = Array.from(document.querySelectorAll('#sidenav-main a[data-search-label]')).map(link => ({
+        label: link.getAttribute('data-search-label'),
+        url: link.href // this is key!
+    }));
+
+    searchInput.addEventListener('input', function () {
+        const query = this.value.trim().toLowerCase();
+        dropdown.innerHTML = '';
+
+        if (query === '') {
+            dropdown.style.display = 'none';
+            return;
+        }
+
+        const results = links.filter(item => item.label.toLowerCase().includes(query));
+
+        if (results.length === 0) {
+            dropdown.innerHTML = `<li class="dropdown-item text-muted">No results found</li>`;
+        } else {
+            results.forEach(item => {
+                const li = document.createElement('li');
+                li.className = 'dropdown-item';
+                li.innerHTML = `<a href="${item.url}" class="text-dark text-decoration-none d-block w-100">${item.label}</a>`;
+                dropdown.appendChild(li);
+            });
+        }
+
+        dropdown.style.display = 'block';
     });
-    </script>
+
+    // Hide dropdown on outside click
+    document.addEventListener('click', function (e) {
+        if (!searchInput.contains(e.target) && !dropdown.contains(e.target)) {
+            dropdown.style.display = 'none';
+        }
+    });
+});
+</script>
