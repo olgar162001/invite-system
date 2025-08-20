@@ -65,6 +65,16 @@
                     </div>
                 @endif
 
+                {{-- Guest Type Badge --}}
+                <p class="badge rounded-pill text-bg-primary bg-gradient badge-text position-absolute">{{ $guest->type }}</p>
+
+                {{-- ✅ QR Code Embedded in Invitation --}}
+                <div class="qr-code position-absolute" style="bottom: 20px; right: 20px;">
+                    {!! QrCode::size(120)->generate(route('guest.checkin', $guest->qr_code)) !!}
+                    <p class="small mt-1 text-muted">Scan to Check-In</p>
+                </div>
+
+
                 {{-- RSVP Buttons --}}
                 <div class="cta position-absolute">
                     @if ($guest->status == '1')

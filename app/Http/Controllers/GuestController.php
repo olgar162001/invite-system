@@ -239,4 +239,22 @@ class GuestController extends Controller
         
         return response()->json(['message' => 'Invitations sent successfully'], 200);
     }
+
+    public function checkIn($qr_code)
+    {
+        $guest = Guest::where('qr_code', $qr_code)->first();
+
+        if (!$guest) {
+            return redirect()->back()->with('error', 'Invalid QR Code');
+        }
+
+        if ($guest->checked_in) {
+            return redirect()->back()->with('info', 'Guest already checked in');
+        }
+
+        $guest->update(['checked_in' => true]);
+
+        return redirect()->back()->with('success', $guest->name . ' checked in successfully');
+    }
+
 }

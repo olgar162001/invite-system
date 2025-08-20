@@ -70,6 +70,7 @@ Route::middleware(['auth', 'isAdmin'])->group(function () {
         return view('calendar');
     })->name('calendar');
 
+    Route::get('/checkin/{qr_code}', [GuestController::class, 'checkIn'])->name('guest.checkin');
 });
 
 //Route::middleware(['guest'])->group(function () {

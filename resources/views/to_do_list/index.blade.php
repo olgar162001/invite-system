@@ -29,9 +29,9 @@
                     <p class="mb-2"><strong>Notes:</strong> {{ $task->description ?? 'None' }}</p>
 
                     <div>
-                        <a href="{{ route('tasks.edit', $task) }}" class="btn btn-sm btn-warning">Edit</a>
+                        <a href="{{ route('tasks.edit', $task->id) }}" class="btn btn-sm btn-warning">Edit</a>
 
-                        <form action="{{ route('tasks.destroy', $task) }}" method="POST" class="d-inline">
+                        <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" class="d-inline">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>

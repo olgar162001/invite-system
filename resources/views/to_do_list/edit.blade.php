@@ -4,7 +4,7 @@
 <div class="container">
     <h2>Edit Task</h2>
 
-    <form action="{{ route('to-do.update', $to_do) }}" method="POST">
+    <form action="{{ route('tasks.update', $to_do->id) }}" method="POST">
         @csrf
         @method('PUT')
 

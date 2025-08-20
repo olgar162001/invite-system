@@ -48,12 +48,13 @@ class ToDoController extends Controller
         return redirect()->route('to_do.index')->with('success', 'Task created.');
     }
 
-    public function edit(ToDo $to_do)
+    public function edit(string $id)
     {
+        $to_do=ToDo::findOrFail($id);
         return view('to_do_list.edit', compact('to_do'));
     }
 
-    public function update(Request $request, ToDo $to_do)
+    public function update(Request $request,string  $id)
     {
         $request->validate([
             'title'       => 'required|string|max:255',
