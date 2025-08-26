@@ -16,8 +16,8 @@ return new class extends Migration
             $table->string('event_name')->nullable();
             $table->string('event_host');
             $table->string('event_type')->nullable();
-            $table->string('groom');
-            $table->string('bride');
+            $table->string('groom')->nullable();
+            $table->string('bride')->nullable();
             $table->date('date')->nullable();
             $table->time('time')->nullable();
             $table->string('venue')->nullable();

@@ -111,34 +111,48 @@ class GuestController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
-    {
-        $guest = Guest::find($id);
-        $guest->name = $request->name;
-        $guest->title = $request->title;
-        $guest->email = $request->email;
-        $guest->phone = $request->phone;
-        $guest->type = $request->type;
-        $guest->check_status = '0';
+        {
+            $guest = Guest::findOrFail($id);
 
-        if ($request->status == 'Attending') {
-            $guest->status = '2';
-        } elseif ($request->status == 'Not Attending') {
-            $guest->status = '0';
-        } else {
-            $guest->status = '1';
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'title' => 'nullable|string|max:100',
+                'email' => 'nullable|email|max:255',
+                'phone' => 'nullable|string|max:20',
+                'type' => 'required|string',
+                'event_id' => 'required|exists:events,id', // ensure the parent event exists
+            ]);
+
+            $guest->name = $request->name;
+            $guest->title = $request->title;
+            $guest->email = $request->email;
+            $guest->phone = $request->phone;
+            $guest->type = $request->type;
+            $guest->check_status = '0';
+
+            if ($request->status == 'Attending') {
+                $guest->status = '2';
+            } elseif ($request->status == 'Not Attending') {
+                $guest->status = '0';
+            } else {
+                $guest->status = '1';
+            }
+
+            if (!$guest->checklist_token) {
+                $guest->checklist_token = $this->generateChecklistToken(6);
+            }
+
+            $guest->user_id = auth()->id();
+
+            // ✅ Set the correct event ID from the form
+            $guest->event_id = $request->event_id;
+
+            $guest->save();
+
+            AuditHelper::log('Update Guest', 'Guest details were updated');
+
+            return redirect()->back()->with('success', 'Guest Edited');
         }
-
-        if (!$guest->checklist_token) {
-            $guest->checklist_token = $this->generateChecklistToken(6);
-        }
-
-        $guest->user_id = auth()->id();
-        $guest->event_id = $id;
-        $guest->update();
-
-        AuditHelper::log('Update Guest', 'Guest details were updated');
-        return redirect('event.show')->with('success', 'Guest Edited');
-    }
 
     /**
      * Remove the specified resource from storage.

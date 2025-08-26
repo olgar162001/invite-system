@@ -40,23 +40,33 @@ class EventController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'event_name' => 'required',
-            'event_type' => 'required',
-            'event_host' => 'required',
-            'groom' => 'required',
-            'bride' => 'required',
-            'date' => 'required|date',
-            'time' => 'required',
-            'venue' => 'required',
-            'location_name' => 'required',
-            'customer_id' => 'nullable|exists:users,id',
-            'template_id' => 'required|exists:templates,id',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'video' => 'nullable|mimes:mp4,mov,avi,wmv|max:10240',
-            'audio' => 'nullable|mimes:mp3,wav,ogg|max:5120',
-        ]);
+        // Base validation (applies to all events)
+        $rules = [
+            'event_name'    => 'required|string|max:255',
+            'event_type'    => 'required|string|max:100',
+            'event_host'    => 'required|string|max:255',
+            'date'          => 'required|date',
+            'time'          => 'required',
+            'venue'         => 'required|string|max:255',
+            'location_name' => 'required|string|max:255',
+            'location_link' => 'nullable|string|max:500',
+            'contacts'      => 'nullable|string|max:500',
+            'customer_id'   => 'nullable|exists:users,id',
+            'template_id'   => 'required|exists:templates,id',
+            'image'         => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'video'         => 'nullable|mimes:mp4,mov,avi,wmv|max:10240',
+            'audio'         => 'nullable|mimes:mp3,wav,ogg|max:5120',
+        ];
 
+        // Extra rules for wedding events
+        if ($request->event_type === 'wedding') {
+            $rules['groom'] = 'required|string|max:255';
+            $rules['bride'] = 'required|string|max:255';
+        }
+
+        $validated = $request->validate($rules);
+
+        // Create event
         $event = new Event($request->only([
             'event_name',
             'event_host',
@@ -74,18 +84,21 @@ class EventController extends Controller
 
         $event->user_id = auth()->id();
 
-        // Handle media files
+        // Handle media files (image, video, audio)
         foreach (['image', 'video', 'audio'] as $fileType) {
             if ($request->hasFile($fileType)) {
-                $event->$fileType = $request->file($fileType)->store("events/{$fileType}s", 'public');
+                $event->$fileType = $request->file($fileType)
+                    ->store("events/{$fileType}s", 'public');
             }
         }
 
         $event->save();
 
-        AuditHelper::log('Create Event', 'Event was created');
-        return redirect('/event')->with('success', 'Event Created');
+        AuditHelper::log('Create Event', "Event '{$event->event_name}' created");
+
+        return redirect('/event')->with('success', 'Event Created Successfully!');
     }
+
 
     public function show(string $id)
     {
@@ -110,8 +123,8 @@ class EventController extends Controller
             'event_name' => 'required',
             'event_type' => 'required',
             'event_host' => 'required',
-            'groom' => 'required',
-            'bride' => 'required',
+            'groom' => 'nullable',
+            'bride' => 'nullable',
             'date' => 'required|date',
             'time' => 'required',
             'venue' => 'required',
