@@ -20,17 +20,19 @@ class EventController extends Controller
 
     public function index()
     {
-
-        // return abort(500);
-
         $user = auth()->user();
-        $events = $user->isAdmin() ? Event::all() : Event::where('user_id', $user->id)->get();
 
-        // Log::info('Event Fetched successfully', [$events]);
+        // Fetch events
+        $events = $user->isAdmin() 
+            ? Event::with('template')->get()  // eager load template relation for admin
+            : Event::where('user_id', $user->id)->with('template')->get(); // eager load template for normal user
 
+        // Fetch all templates for the modal dropdown
+        $templates = Template::all();
 
-        return view('event.index', compact('events'));
+        return view('event.index', compact('events', 'templates'));
     }
+
 
     public function create()
     {
